@@ -186,7 +186,13 @@
 </code></pre><pre><code>在写完文章后，要上传到静态网站上，首先要在站点跟目录（myblog)上执行以下命令：
 </code></pre>
 <pre><code>hugo 或者 hugo --theme=maupassant --buildDrafts --baseUrl=&quot;https://zdhwg.github.io/&quot;
-</code></pre><pre><code>  要发布的话，执行以下命令：</code></pre>
+</code></pre><pre><code>  要发布的话，执行以下命令：
+</code></pre>
+<pre><code>cd public //此文件要同步到远程的github上
+git add .
+git commit -m &quot;此次操作的名称&quot;
+git push 或者 git push origin master 或者 git push -u origin master -f
+</code></pre><p><img src="D:%5Cdeskbook%5Cdocument%5C%E5%9B%BE%E7%89%87%5Cblog%E7%94%A8%E5%9B%BE.jpg" alt=""></p>
 
         </div>
 
