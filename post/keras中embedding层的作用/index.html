@@ -182,49 +182,47 @@
         
         
         <div class="post-content">
-            <pre><code>一、深度学习中embedding层的作用是什么？在做NLP相关工作时经常会与embedding层打交道，在查阅了有关资料后，将其作用和用法记录如下。
-
-首先，使用embedding主要有两大原因：
-
-1.使用One-hot 方法编码的向量会很高维也很稀疏。假设我们在做自然语言处理（NLP）中遇到了一个包含2000个词的字典，当使用One-hot编码时，每一个词会被一个包含2000个整数的向量来表示，其中  1999个数字是0，要是我的字典再大一点的话这种方法的计算效率岂不是大打折扣？
-2.训练神经网络的过程中，每个嵌入的向量都会得到更新。通过embedding层可以展现多维空间中词与词之间有多少相似性，这使我们能可视化的了解词语之间的关系，不仅仅是词语，任何能通过嵌入层 Embedding 转换成向量的内容都可以这样做。
-
-下面举例如下：
-</code></pre>
+            <p>一、深度学习中embedding层的作用是什么？在做NLP相关工作时经常会与embedding层打交道，在</p>
+<p>查阅了有关资料后，将其作用和用法记录如下。</p>
+<p>首先，使用embedding主要有两大原因：</p>
+<p>1.使用One-hot 方法编码的向量会很高维也很稀疏。假设我们在做自然语言处理（NLP）中遇到了一个</p>
+<p>包含2000个词的字典，当使用One-hot编码时，每一个词会被一个包含2000个整数的向量来表示，其中</p>
+<p>1999个数字是0，要是我的字典再大一点的话这种方法的计算效率岂不是大打折扣？</p>
+<p>2.训练神经网络的过程中，每个嵌入的向量都会得到更新。通过embedding层可以展现多维空间中词</p>
+<p>与词之间有多少相似性，这使我们能可视化的了解词语之间的关系，不仅仅是词语，任何能通过嵌入层</p>
+<p>Embedding 转换成向量的内容都可以这样做。</p>
+<p>下面举例如下：</p>
 <pre><code>&quot;deep learning is very deep&quot;
-</code></pre><pre><code>对上述句子使用embedding层，第一步是通过索引对该句子进行编码，对句子中每个不同的单词分配不同的索引，上述句子会变成下面这样：
-</code></pre>
+</code></pre><p>对上述句子使用embedding层，第一步是通过索引对该句子进行编码，对句子中每个不同的单词分配</p>
+<p>不同的索引，上述句子会变成下面这样：</p>
 <pre><code>1 2 3 4 1
-</code></pre><pre><code>接下来会创建嵌入矩阵，我们要决定每一个索引需要分配多少个“latent factor&quot;(潜在因子)，即每个单词用多长的向量表示，通常情况是长度分配为32和50。此处举例可分配6个潜在因子，那么嵌入矩阵就会变成这样：
-</code></pre>
+</code></pre><p>接下来会创建嵌入矩阵，我们要决定每一个索引需要分配多少个“latent factor&rdquo;(潜在因子)，即每个单词</p>
+<p>用多长的向量表示，通常情况是长度分配为32和50。此处举例可分配6个潜在因子，那么嵌入矩阵就会变</p>
+<p>成这样：</p>
 <p><img src="/img/embedding_1.png" alt=""></p>
-<pre><code>embedding的作用就是将单词”deep&quot;用向量[.32,.02,.48,.21,.56,.15]表示，在训练神经网络的过程中，嵌入向量也会被不断更新。这样通过embedding我们就可以在高维空间中探索哪些单词之间具有相似性，单词向量在高维空间的分布如下图所示（通过t-SNE降维技术可将这些相似性可视化）：
-</code></pre>
-<p><img src="/img/embedding_2.png" alt=""></p>
-<pre><code>二、keras中embedding层
-
-实际的embedding操作举例如下：
-
-输入句子样本为“I very happy&quot;，词典即每个单词的索引是[0:pad_word,1:I,2:very,3:happy,4:so,5:sad],嵌入矩阵
-</code></pre>
-<p>$$
-W=\left[\matrix{0.12 &amp; 0.2\0.30 &amp; 0.15\1.0 &amp; 0.69\20.1 &amp; 1.45\1.29 &amp; 2.01\3.45 &amp; 3.45}\right]
-$$
-则input X=[1,2,3]，然后对X进行one-hot编码：
-$$
-X_one_hot=\left[\matrix{0&amp;1&amp;0&amp;0&amp;0&amp;0\<br>
-0&amp;0&amp;1&amp;0&amp;0&amp;0\<br>
-0&amp;0&amp;0&amp;1&amp;0&amp;0}\right]
-$$
-那么对输入X的词向量表示应该是X_one_hot×W,如下所示：</p>
+<p>embedding的作用就是将单词”deep&quot;用向量[.32,.02,.48,.21,.56,.15]表示，在训练神经网络的过程中，嵌</p>
+<p>入向量也会被不断更新。这样通过embedding我们就可以在高维空间中探索哪些单词之间具有相似性，单</p>
+<p>词向量在高维空间的分布如下图所示（通过t-SNE降维技术可将这些相似性可视化）：</p>
+<p><img src="/img/embedding_2.png" alt="width=80%"></p>
+<p>二、keras中embedding层</p>
+<p>实际的embedding操作举例如下：</p>
+<p>输入句子样本为“I very happy&rdquo;，词典即每个单词的索引是[0:pad_word,1:I,2:very,3:happy,4:so,5:sad],嵌</p>
+<p>入矩阵</p>
+<p><img src="/img/%E5%85%AC%E5%BC%8F_1.jpg" alt=""></p>
+<p>则input X=[1,2,3]，然后对X进行one-hot编码：</p>
+<p><img src="/img/%E5%85%AC%E5%BC%8F_2.png" alt=""></p>
+<p>那么对输入X的词向量表示应该是X_one_hot×W,如下所示：</p>
 <p><img src="/img/embedding_3.jpg" alt=""></p>
-<pre><code>也就是说对于像一个句子样本X=[1,2,3] (1,2,3表示单词在词典中的索引)这样的输入可以先对它one-hot然后乘上词嵌入矩阵就可得到这个句子的词嵌入向量表示。要想得到好的词向量，我们需要训练的就是这个矩阵W(shape=(input_dim,output_dim))。Embedding层的作用就是训练这个矩阵W并进行词的嵌入为每一个词分配与它对应的词向量。这个词嵌入矩阵W可以先随机初始化，然后根据下游任务训练获得，也可以使用预训练的词嵌入矩阵来初始化它(keras中用weights来为layer初始化任意权重)，然后再训练，也可以直接用预训练的词嵌入矩阵来初始化它并冻结它，不让它变化，不让它可训练(keras中用trainable=False)。
-
-keras中的embedding层函数：
-</code></pre>
+<p>也就是说对于像一个句子样本X=[1,2,3] (1,2,3表示单词在词典中的索引)这样的输入可以先对它one-hot然</p>
+<p>后乘上词嵌入矩阵就可得到这个句子的词嵌入向量表示。要想得到好的词向量，我们需要训练的就是这个</p>
+<p>矩阵W(shape=(input_dim,output_dim))。Embedding层的作用就是训练这个矩阵W并进行词的嵌入为每</p>
+<p>一个词分配与它对应的词向量。这个词嵌入矩阵W可以先随机初始化，然后根据下游任务训练获得，也可</p>
+<p>以使用预训练的词嵌入矩阵来初始化它(keras中用weights来为layer初始化任意权重)，然后再训练，也可</p>
+<p>以直接用预训练的词嵌入矩阵来初始化它并冻结它，不让它变化，不让它可训练(keras中用</p>
+<p>trainable=False)。</p>
+<p>keras中的embedding层函数：</p>
 <pre><code>keras.layers.Embedding(input_dim, output_dim, embeddings_initializer=‘uniform’, embeddings_regularizer=None, activity_regularizer=None, embeddings_constraint=None, mask_zero=False, input_length=None)
-</code></pre><pre><code>主要参数说明：
-</code></pre>
+</code></pre><p>主要参数说明：</p>
 <ul>
 <li>input_dim:int,整个词典的大小，或者说唯一单词的个数，当然如果还有一个用于padding的单词那就应加1。</li>
 <li>output_dim:int，嵌入维度，设计的词向量的维度。</li>
