@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>理解Glove模型 | WG的博客</title>
+    <meta property="og:title" content="理解Glove模型 - WG的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2020-02-17T19:49:09&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2020-02-17T19:49:09&#43;08:00'>
+        
+    <meta name="Keywords" content="WG,博客,python,NLP,kaggle,机器学习">
+    <meta name="description" content="理解Glove模型">
+        
+    <meta name="author" content="WG">
+    <meta property="og:url" content="https://zdhwg.github.io/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+
+
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://zdhwg.github.io">
+                        WG的博客
+                    </a>
+                
+                <p class="description">陌上花开，可缓缓醉矣。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://zdhwg.github.io">首页</a>
+                    
+                    <a  href="https://zdhwg.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://zdhwg.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents"></nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">理解Glove模型</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2020年2月17日
+        </date>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <p>Glove是词的向量化表示方法之一，常用的词的向量化表示方法有：word2vec、glove、ELMo、</p>
+<p>BERT。首先先介绍一下除Glove以外的其他三种方法。</p>
+<p><strong>word2vec</strong></p>
+<p>word2vec是2013年提出的方法， 它的核心思想是通过词的上下文得到词的向量化表示，有两种方法：</p>
+<p>CBOW（通过附近词预测中心词）、Skip-gram（通过中心词预测附近的词），如下图所示：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/%E8%AF%8D%E5%90%91%E9%87%8F%E5%9B%BE.png" alt=""></p>
+<p>在用CBOW或者Skip-gram方法训练词向量的过程中，因为词汇表大和样本不均衡，一般会采用多层</p>
+<p>softmax或负采样优化的方法。</p>
+<p><strong>ELMo</strong></p>
+<p>下面介绍ELMo方法， word2vec和glove存在一个问题，<strong>即词在不同的语境下其实有不同的含义，</strong></p>
+<p><strong>而这两个模型词在不同语境下的向量表示是相同的</strong>，Elmo就是针对这一点进行了优化。ELMo的作</p>
+<p>者认为ELMo有两个优势：</p>
+<ol>
+<li>能够学习到单词用法的复杂特性。</li>
+<li>学习到这些复杂用法在不同上下文的变化。</li>
+</ol>
+<p>针对点1，作者是通过多层的stack LSTM去学习词的复杂用法，不同层的output可以获得不同层次</p>
+<p>的词法特</p>
+<p>征。针对点2，作者通过pre-train+fine tuning的方式实现，先在大语料库上进行pre-train，再在下游任务</p>
+<p>的语料库上进行fine tuning。</p>
+<p><strong>ELMo的具体实现方式：</strong></p>
+<p>ELMo来自于Embedding from Language Models的简写，此处的Language Models具体的实现方</p>
+<p>式是LSTM，一开始的训练目标可以表示为如下的形式：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/1.png" alt=""></p>
+<p>具体来说是通过<strong>双方向</strong>预测单词，前向过程中，用1～k-1的词去预测第k个词，后向过程中，用k+1</p>
+<p>～N的</p>
+<p>词去预测第k个词。具体的编码方式作者采用了LSTM，可以表示为：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/2.jpg" alt=""></p>
+<p>通过LSTM编码Tokens，用第k-1个Token的隐藏层输出预测第k个Token，预测的方法是用一个</p>
+<p>softmax做一个分类，其中 <img src="https://www.zhihu.com/equation?tex=%5CTheta_x" alt="[公式]"> 是token的向量表示， <img src="https://www.zhihu.com/equation?tex=%5CTheta_s" alt="[公式]"> 是softmax的参数。这种双向LSTM堆</p>
+<p>叠L层，stack-RNN的方式也就是每一层隐藏层的输出作为下一层的输入。 那么对于每个Token会有</p>
+<p>2L+1个向量表示，双向所以每层2个，+1是token输出层的向量表示，作者将2L+1个向量组合起来</p>
+<p>得到ELMo每个token的向量表示：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/3.jpg" alt=""></p>
+<p>其中 <img src="https://www.zhihu.com/equation?tex=h_%7Bk%2Cj%7D%5E%7BLM%7D" alt="[公式]"> 是对于token k的第j层的隐藏层输出，当j=0的时候表示输入层token的向量表示，这个</p>
+<p>向量表示可以通过CNN或Highway等网络引入char-level的特征。<img src="https://www.zhihu.com/equation?tex=s_j%5E%7Btask%7D" alt="[公式]"> 是一个softmax的归一化，</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cgamma%5E%7Btask%7D" alt="[公式]"> 是一个放缩的参数，可以让目标模型对ELMo的向量进行放缩。 经过两层双向LSTM提取特</p>
+<p>征，又针对下游任务定制词向量，效果比word2vec和glove要好也在情理之中。</p>
+<p><strong>BERT</strong></p>
+<p>在NLP中，一共有4大类任务：</p>
+<ul>
+<li>序列标注：分词／词性标注／命名实体识别&hellip;</li>
+<li>分类任务：文本分类／情感分析&hellip;</li>
+<li><em>句子关系判断：自然语言推理／深度文本匹配／问答系统&hellip;</em></li>
+<li>生成式任务：机器翻译／文本摘要生成&hellip;</li>
+</ul>
+<p>BERT为这4大类任务的前3个都设计了简单至极的下游接口，省去了各种花哨的Attention、stack等</p>
+<p>复杂的网络结构，且实验效果全面取得了大幅度的提升。 BERT的工作方式与ELMo的工作方式是类</p>
+<p>似的，都是现在大规模的语料库中pre-train，然后将下游任务输入，进行比较轻量级的fine-</p>
+<p>tuning。</p>
+<p>BERT的工作方式采用了Transformer(Attention is all you need)，详细的工作方式后续再在介绍。</p>
+<p>下面着重介绍Glove模型：</p>
+<p><strong>Glove</strong></p>
+<p>Cbow/Skip-Gram 是一个local context window的方法，缺乏了整体的词和词的关系，负样本采用</p>
+<p>sample的方式会缺失词的关系信息。另外，直接训练Skip-Gram类型的算法，很容易使得高曝光词</p>
+<p>汇得到过多的权重。Global Vector(Glove)融合了矩阵分解Latent Semantic Analysis (LSA)的全局统</p>
+<p>计信息和local context window优势。融入全局的先验统计信息，可以加快模型的训练速度，又可</p>
+<p>以控制词的相对权重。</p>
+<p>skip-gram、CBOW每次都是用一个窗口中的信息更新出词向量，但是Glove则是用了全局的信息</p>
+<p>（共线矩阵），也就是多个窗口进行更新。下面详细介绍。</p>
+<p>方法概述：首先基于语料库构建词的共现矩阵，然后基于共现矩阵和GloVe模型学习词向量。</p>
+<p>设共现矩阵为X，其元素为Xi,j。Xi,j的意义是在整个语料库中，单词i和单词j共同出现在一个窗口中</p>
+<p>的次数。</p>
+<p>举个栗子：设有语料库</p>
+<pre><code>i love you but you love him i am sad
+</code></pre><p>这个小小的语料库只有1个句子，涉及到7个单词：i、love、you、but、him、am、sad。如果我们</p>
+<p>采用一个窗口宽度为5（左右长度都为2）的统计窗口，那么就有以下窗口内容：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/4.png" alt=""></p>
+<p>窗口0、1长度小于5是因为中心词左侧内容少于2个，同理窗口8、9长度也小于5。 以窗口5为例说</p>
+<p>明如何构造共现矩阵：中心词为love，语境词为but、you、him、i；则执行：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/5.png" alt=""></p>
+<p>使用窗口将整个语料库遍历一遍，即可得到共现矩阵X。</p>
+<p><strong>使用Glove模型训练词向量</strong></p>
+<p>先看模型，代价函数长这个样子：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/6.png" alt=""></p>
+<p>vi,vj是单词i和单词j的词向量，bi,bj是两个标量（作者定义的偏差项），f是权重函数（具体函数公式</p>
+<p>及功能后面介绍），N是词汇表的大小（共现矩阵维度为N*N）。可以看到，GloVe模型没有使用神</p>
+<p>经网络的方法。</p>
+<p><strong>模型怎么来的</strong></p>
+<p>那么作者为什么这么构造模型呢？首先定义几个符号：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/7.png" alt=""></p>
+<p>其实就是矩阵单词i那一行的和；</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/8.png" alt=""></p>
+<p>条件概率，表示单词k出现在单词i语境中的概率；</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/9.png" alt=""></p>
+<p>两个条件概率的比率。</p>
+<p>作者发现，两个条件概率的比率这个指标是有规律的，规律统计在下表：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/10.png" alt=""></p>
+<p>思想：假设我们已经得到了词向量，如果用词向量vi、vj、vk通过某种函数计算ratio_i,j,k，能够得到</p>
+<p>和上表中一样的规律的话，就意味着我们的词向量中蕴含了共现矩阵中所蕴含的信息。</p>
+<p>设用词向量vi、vj 、vk计算ratio_i,j,k的函数为<em>g</em>(vi,vj,vk) (我们先不去管具体的函数形式），那么应该有：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/11.jpg" alt=""></p>
+<p>但是上面的代价函数太过于复杂，计算复杂度很高（为N的3次方），下面考虑化简它：</p>
+<p>作者的思路是这样的：</p>
+<p>1.要考虑单词i和单词j之间的关系，函数g中要有vi-vj这样的一项；（在线性空间中考虑两个向量的相似性，这样的</p>
+<p>差项是一个合理的选择）</p>
+<p>2.ratio_i,j,k是一个变量，但输入是向量，所以可通过内积项将向量变为标量，所以有（vi-vj)^T*vk这么一项。</p>
+<p>3.最后在函数的外面一层加上一个指数运算exp(),套上exp()的目的如下：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/12.jpg" alt=""></p>
+<p>然后最终的化简方法就是分别让分子相等，分母相等：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/13.png" alt=""></p>
+<p>化简后的复杂度大大减小(为N的平方)，加入指数函数运算的目的是让差形式转化为商形式，最终可以分别让分子</p>
+<p>和分母相等。</p>
+<p>化简之后还有一个问题：</p>
+<p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/14.png" alt=""></p>
+<p>以上即为整个glove的模型。</p>
+<p>（写公式也太复杂了）</p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://zdhwg.github.io">WG</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/">https://zdhwg.github.io/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/keras%E4%B8%ADembedding%E5%B1%82%E7%9A%84%E4%BD%9C%E7%94%A8/">Keras中embedding层的作用</a></li>
+        
+        <li><a href="/about/">关于我</a></li>
+        
+        <li><a href="/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">Hugo博客如何新建及上传文章</a></li>
+        
+        <li><a href="/archives/">归档</a></li>
+        
+        <li><a href="/search/">搜索</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            没有标签
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "zdhwg/hugoblogtalks"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+</div>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://zdhwg.github.io/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://zdhwg.github.io">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/" title="理解Glove模型">理解Glove模型</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/keras%E4%B8%ADembedding%E5%B1%82%E7%9A%84%E4%BD%9C%E7%94%A8/" title="Keras中embedding层的作用">Keras中embedding层的作用</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/" title="Hugo博客如何新建及上传文章">Hugo博客如何新建及上传文章</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title">分类</h3>
+<ul class="widget-list">
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">标签</h3>
+<div class="tagcloud">
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="http://blog.csdn.net/qq_40800269" title="csdn博客">WG的csdn博客</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://zdhwg.github.io/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=26212426&auto=1&height=66"></iframe>
+</div>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+    <div class="container">
+        &copy; 2020 <a href="https://zdhwg.github.io">WG的博客 By WG</a>.
+        Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
+        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/flysnow-org/maupassant-hugo" target="_blank">maupassant</a>.
+        
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/gh/zdhwg/live2d-widget/autoload.js"></script>
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+</body>
+
+</html>
