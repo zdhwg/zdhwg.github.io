@@ -6,20 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Hugo博客如何新建及上传文章 | WG的博客</title>
-    <meta property="og:title" content="Hugo博客如何新建及上传文章 - WG的博客">
+    <title>Cs224n笔记 Lecture7 | WG的博客</title>
+    <meta property="og:title" content="Cs224n笔记 Lecture7 - WG的博客">
     <meta property="og:type" content="article">
         
-    <meta property="article:published_time" content='2020-02-13T17:48:26&#43;08:00'>
+    <meta property="article:published_time" content='2020-03-14T10:28:07&#43;08:00'>
         
         
-    <meta property="article:modified_time" content='2020-02-13T17:48:26&#43;08:00'>
+    <meta property="article:modified_time" content='2020-03-14T10:28:07&#43;08:00'>
         
     <meta name="Keywords" content="WG,博客,python,NLP,kaggle,机器学习">
-    <meta name="description" content="Hugo博客如何新建及上传文章">
+    <meta name="description" content="Cs224n笔记 Lecture7">
         
     <meta name="author" content="WG">
-    <meta property="og:url" content="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">
+    <meta property="og:url" content="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture7/">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
@@ -136,7 +136,11 @@
 <div class="post-toc" style="position: absolute; top: 188px;">
     <h2 class="post-toc-title">文章目录</h2>
     <div class="post-toc-content">
-        <nav id="TableOfContents"></nav>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#lecture7笔记-vanishing-gradients-and-fancy-rnns">lecture7笔记-vanishing gradients and fancy Rnns</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 <script type="text/javascript">
@@ -168,10 +172,10 @@
 </script>
     <article class="post">
         <header>
-            <h1 class="post-title">Hugo博客如何新建及上传文章</h1>
+            <h1 class="post-title">Cs224n笔记 Lecture7</h1>
         </header>
         <date class="post-meta meta-date">
-            2020年2月13日
+            2020年3月14日
         </date>
         
         
@@ -182,20 +186,30 @@
         
         
         <div class="post-content">
-            <p>​       在hugo博客每次要创建新的博客时，可以在命令行cd到myblog的根目录（或者直接在content/post文件夹下新建一个markdown文件），然后运行以下命令：</p>
-<pre><code>hugo new post/要创建的文件名字.md
-</code></pre><p>​	在写完文章后，要上传到静态网站上，首先要在站点跟目录（myblog)上执行以下命令：</p>
-<pre><code>hugo 或者 hugo --theme=maupassant --buildDrafts --baseUrl=&quot;https://zdhwg.github.io/&quot;
-</code></pre><pre><code>如果要在本地预览在再上传到网站上，可以通过执行以下命令：
-</code></pre>
-<pre><code>hugo server
-</code></pre><pre><code>要发布的话，执行以下命令：
-</code></pre>
-<pre><code>cd public //此文件要同步到远程的github上
-git add .
-git commit -m &quot;此次操作的名称&quot;
-git push 或者 git push origin master 或者 git push -u origin master -f
-</code></pre><p><img src="/img/blog%E7%94%A8%E5%9B%BE.jpg" alt=""></p>
+            <h2 id="lecture7笔记-vanishing-gradients-and-fancy-rnns">lecture7笔记-vanishing gradients and fancy Rnns</h2>
+<p>1.梯度消失：由于链式法则（chain rule),在对深层网络反向传播梯度时，可能会出现梯度越乘越小的情况，此即为梯度消失。RNN中的梯度消失和一般的深层神经网络的梯度消失概念有所不同，原因在于RNN权重共享，总梯度为各个时间步的梯度之和，所以总的梯度一般不会消失，而是梯度越穿越弱，来自远距离的梯度消失。RNN因为不断的乘以相同的权重矩阵，梯度消失问题更加严重。</p>
+<p>梯度消失的问题：来自远层网络的梯度丢失，因为它比来自附近的梯度小得多，所以权重更新只受附近梯度的影响。梯度爆炸也是如次,梯度爆炸的最好结果是网络无法训练，最坏的结果是权重值为Nah无法更新权重值。</p>
+<p>2.解决梯度消失的方法可以有尝试改变激活函数，例如用Relu函数或者LeakyRelu函数代替sigmoid函数，另外在一般的深层网络中可以通过加入层与层之间的连接来缓解梯度消失问题，例如&quot;Resnet&rdquo;、&ldquo;Densenet&quot;或者:&ldquo;HighwayNet&rdquo;; 解决梯度爆炸一个方案时Gradient clipping:即如果在梯度大于某一阈值，则在SGD更新之前按比例缩小梯度值，梯度下降方向认识原来的方向，伪代码如下：</p>
+<p><img src="/img/lecture7/1.png" alt=""></p>
+<p>3.对于梯度消失问题，解决的基本思路是设置一些存储单元来更有效的进行长程信息的存储，基于此提出了RNN的进化结构:LSTM和GRU。</p>
+<p>4.LSTM(long short term memory):LSTM加入了一个新的模块cell state 来存储长程的信息，加入了3个gate来控制信息的擦除，写入和读取。LSTM的公式如下：</p>
+<p><img src="/img/lecture7/2.png" alt="这里有什么用"></p>
+<p>New memeory cell 通过将新输入的x_t与代表之前context的hidden state h_t-1结合生成新的memory;</p>
+<p>Input gate i_t决定了新的信息(输入)是否有保留的价值；</p>
+<p>Forget gate f-t 决定了之前的cell state 有多少值得保留的信息；</p>
+<p>Final memory cell c_t 通过将forget gate与前memory cell作元素积得到了前memory cell需要传递下去的信息，并与input gate和新的memory cell的元素积求和。极端情况是forget gate值为1，则之前的memory cell的全部信息都会传递下去，使得梯度消失问题不复存在； 三门结构的激活函数是sigmoid函数，sigmoid函数的范围是0到1，当sigmoid函数取值接近0时，表示信息不能通过gate，反之，接近1时表示信息可以通过gate。</p>
+<p>Output gate o_t 决定了memory cell 中有多少信息需要保存在hidden state中。</p>
+<p>单个LSTM的结构如下图所示：</p>
+<p><img src="/img/lecture7/3.png" alt=""></p>
+<p>LSTM在2013-2015年在多个NLP任务中取得了State of art 的结果，后来逐渐被&quot;Transfomer&quot;结构所取代。</p>
+<p>5.GRU(Gated Recurrent Units)在2014年被提出，作为一个更简单的对LSTM的替代，去掉了cell state。GRU可以看作是将LSTM中的forget gate和input gate合并成了一个update gate，同时将cell state 也合并到hidden state中。公式如下所示：</p>
+<p><img src="/img/lecture7/4.png" alt=""></p>
+<p>虽然还存在RNN的很多其他变种，但是LSTM与RNN是最广泛应用的。最大的区别就是GRU有更少的参数，更便于计算，对于模型效果方面，两者类似。通常我们可以从LSTM开始，如果需要提升效率的话再准换成GRU。</p>
+<p>6.RNN还存在其他的变体，例如双向RNN-BiRNN。一般的RNN只是单向的，RNN只考虑了单侧的信息，为了克服这个缺点，提出了双向RNN，它同时考虑了输入的上下文信息，结构如下图所示：</p>
+<p><img src="/img/lecture7/5.png" alt=""></p>
+<p>BiRNN只有当有全部的输入序列时才起作用（同时含有上下文信息），在语言模型（language model)中很难运用，因为它只有左侧的信息。双向编码的模型中最成功的是BERT，后续会学习。</p>
+<p>RNN的变体还有多层RNN——Multi-RNN（Stacked-RNN)，它从另一个维度&quot;加深&quot;了RNN，提高了其表达能力，结构如下图：</p>
+<p><img src="/img/lecture7/6.png" alt=""></p>
 
         </div>
 
@@ -203,7 +217,7 @@ git push 或者 git push origin master 或者 git push -u origin master -f
 <div class="post-archive">
     <ul class="post-copyright">
         <li><strong>原文作者：</strong><a rel="author" href="https://zdhwg.github.io">WG</a></li>
-        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture7/">https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture7/</a></li>
         <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
     </ul>
 </div>
@@ -217,9 +231,15 @@ git push 或者 git push origin master 或者 git push -u origin master -f
     <h2>See Also</h2>
     <ul class="listing">
         
-        <li><a href="/archives/">归档</a></li>
+        <li><a href="/post/cs224n_lecture6%E7%AC%94%E8%AE%B0/">Cs224n笔记-lecture6</a></li>
         
-        <li><a href="/search/">搜索</a></li>
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/">Cs224n笔记 Lecture5</a></li>
+        
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture4/">Cs224n笔记 Lecture4</a></li>
+        
+        <li><a href="/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/">理解Glove模型</a></li>
+        
+        <li><a href="/post/keras%E4%B8%ADembedding%E5%B1%82%E7%9A%84%E4%BD%9C%E7%94%A8/">Keras中embedding层的作用</a></li>
         
     </ul>
 </div>

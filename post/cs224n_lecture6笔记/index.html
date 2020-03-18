@@ -6,20 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Hugo博客如何新建及上传文章 | WG的博客</title>
-    <meta property="og:title" content="Hugo博客如何新建及上传文章 - WG的博客">
+    <title>Cs224n笔记-lecture6 | WG的博客</title>
+    <meta property="og:title" content="Cs224n笔记-lecture6 - WG的博客">
     <meta property="og:type" content="article">
         
-    <meta property="article:published_time" content='2020-02-13T17:48:26&#43;08:00'>
+    <meta property="article:published_time" content='2020-03-11T18:54:32&#43;08:00'>
         
         
-    <meta property="article:modified_time" content='2020-02-13T17:48:26&#43;08:00'>
+    <meta property="article:modified_time" content='2020-03-11T18:54:32&#43;08:00'>
         
     <meta name="Keywords" content="WG,博客,python,NLP,kaggle,机器学习">
-    <meta name="description" content="Hugo博客如何新建及上传文章">
+    <meta name="description" content="Cs224n笔记-lecture6">
         
     <meta name="author" content="WG">
-    <meta property="og:url" content="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">
+    <meta property="og:url" content="https://zdhwg.github.io/post/cs224n_lecture6%E7%AC%94%E8%AE%B0/">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
@@ -136,7 +136,11 @@
 <div class="post-toc" style="position: absolute; top: 188px;">
     <h2 class="post-toc-title">文章目录</h2>
     <div class="post-toc-content">
-        <nav id="TableOfContents"></nav>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#lecture6-language-models-and-recurrent-nerual-networks">lecture6 Language Models and Recurrent Nerual Networks</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 <script type="text/javascript">
@@ -168,10 +172,10 @@
 </script>
     <article class="post">
         <header>
-            <h1 class="post-title">Hugo博客如何新建及上传文章</h1>
+            <h1 class="post-title">Cs224n笔记-lecture6</h1>
         </header>
         <date class="post-meta meta-date">
-            2020年2月13日
+            2020年3月11日
         </date>
         
         
@@ -182,20 +186,24 @@
         
         
         <div class="post-content">
-            <p>​       在hugo博客每次要创建新的博客时，可以在命令行cd到myblog的根目录（或者直接在content/post文件夹下新建一个markdown文件），然后运行以下命令：</p>
-<pre><code>hugo new post/要创建的文件名字.md
-</code></pre><p>​	在写完文章后，要上传到静态网站上，首先要在站点跟目录（myblog)上执行以下命令：</p>
-<pre><code>hugo 或者 hugo --theme=maupassant --buildDrafts --baseUrl=&quot;https://zdhwg.github.io/&quot;
-</code></pre><pre><code>如果要在本地预览在再上传到网站上，可以通过执行以下命令：
-</code></pre>
-<pre><code>hugo server
-</code></pre><pre><code>要发布的话，执行以下命令：
-</code></pre>
-<pre><code>cd public //此文件要同步到远程的github上
-git add .
-git commit -m &quot;此次操作的名称&quot;
-git push 或者 git push origin master 或者 git push -u origin master -f
-</code></pre><p><img src="/img/blog%E7%94%A8%E5%9B%BE.jpg" alt=""></p>
+            <h2 id="lecture6-language-models-and-recurrent-nerual-networks">lecture6 Language Models and Recurrent Nerual Networks</h2>
+<p>1.language model:就是根据已知序列推测下一个单词（或序列）的问题。输入法、浏览器搜索都有语言模型（根据你输入的单词推测下一个单词或短语）。</p>
+<p>2.n-grams:最经典的language model是n-gram,它是基于多个单词在一起使用的统计特性，推测下一个单词时运用了条件概率公式,条件概率公式中为了避免概率为0或者不存在，运用了平滑（即在分母上加上一个比较小的数，加一平滑、线性插值平滑）和backoff的技巧。n-grams有存储和稀疏性问题。</p>
+<p>3.神经LM（和编码器很像）。</p>
+<p>4.RNN：处理序列信息，共享权重和偏差；核心公式如下：</p>
+<p><img src="/img/lecture6/1.jpg" alt=""></p>
+<p>上述公式包括两部分的输入，一部分为当前时间步的输入Xt，另一部分为上一时刻的状态值（相当于记忆值）。每一时间步的两个输入部分的权重向量是相同的，这减小了训练成本。循环神经元的计算步骤如下：</p>
+<ol>
+<li>将输入时间步提供给网络，也就是提供给网络Xt;</li>
+<li>接下来利用输入和前一时刻的状态计算当前状态，也就是ht;</li>
+<li>当前状态变成下一步的前一状态ht-1;</li>
+<li>我们可以执行上面的步骤任意多次（主要取决于任务需要），然后组合从前面所有步骤中得到的信息;</li>
+<li>一旦所有时间步都完成了，最后的状态用来计算输出yt;</li>
+<li>输出与真实标签进行比较并得到误差;</li>
+<li>误差通过后向传播对权重进行升级更新，进而网络训练完成。</li>
+</ol>
+<p>RNN反向传播的过程中总的误差是每一个时间步的误差的和，RNN会有梯度消失的问题，梯度消失的原因是权重共享，在对权重矩阵求偏导时，由于每一个时间步的权重矩阵都是同一个，所以根据求导法则，导数是每个时间步对权重的导数之和。导数一般是和权重相乘的形式，当权重在0-1的时候就容易出现梯度消失，大于1就是梯度爆炸，如何解决，后面的LSTM会改善此情况。</p>
+<p>另外RNN是串行结构，不能并行计算，计算较慢。</p>
 
         </div>
 
@@ -203,7 +211,7 @@ git push 或者 git push origin master 或者 git push -u origin master -f
 <div class="post-archive">
     <ul class="post-copyright">
         <li><strong>原文作者：</strong><a rel="author" href="https://zdhwg.github.io">WG</a></li>
-        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/cs224n_lecture6%E7%AC%94%E8%AE%B0/">https://zdhwg.github.io/post/cs224n_lecture6%E7%AC%94%E8%AE%B0/</a></li>
         <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
     </ul>
 </div>
@@ -217,9 +225,15 @@ git push 或者 git push origin master 或者 git push -u origin master -f
     <h2>See Also</h2>
     <ul class="listing">
         
-        <li><a href="/archives/">归档</a></li>
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/">Cs224n笔记 Lecture5</a></li>
         
-        <li><a href="/search/">搜索</a></li>
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture4/">Cs224n笔记 Lecture4</a></li>
+        
+        <li><a href="/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/">理解Glove模型</a></li>
+        
+        <li><a href="/post/keras%E4%B8%ADembedding%E5%B1%82%E7%9A%84%E4%BD%9C%E7%94%A8/">Keras中embedding层的作用</a></li>
+        
+        <li><a href="/about/">关于我</a></li>
         
     </ul>
 </div>

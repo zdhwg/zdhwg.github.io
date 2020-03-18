@@ -199,20 +199,20 @@
 </code></pre><p>接下来会创建嵌入矩阵，我们要决定每一个索引需要分配多少个“latent factor&rdquo;(潜在因子)，即每个单词</p>
 <p>用多长的向量表示，通常情况是长度分配为32和50。此处举例可分配6个潜在因子，那么嵌入矩阵就会变</p>
 <p>成这样：</p>
-<p><img src="/img/embedding_1.png" alt=""></p>
+<p><img src="/img/embedding/embedding_1.png" alt=""></p>
 <p>embedding的作用就是将单词”deep&quot;用向量[.32,.02,.48,.21,.56,.15]表示，在训练神经网络的过程中，嵌</p>
 <p>入向量也会被不断更新。这样通过embedding我们就可以在高维空间中探索哪些单词之间具有相似性，单</p>
 <p>词向量在高维空间的分布如下图所示（通过t-SNE降维技术可将这些相似性可视化）：</p>
-<p><img src="/img/embedding_2.png" alt="width=80%"></p>
+<p><img src="/img/embedding/embedding_2.png" alt="width=80%"></p>
 <p>二、keras中embedding层</p>
 <p>实际的embedding操作举例如下：</p>
 <p>输入句子样本为“I very happy&rdquo;，词典即每个单词的索引是[0:pad_word,1:I,2:very,3:happy,4:so,5:sad],嵌</p>
 <p>入矩阵</p>
-<p><img src="/img/%E5%85%AC%E5%BC%8F_1.jpg" alt=""></p>
+<p><img src="/img/embedding/%E5%85%AC%E5%BC%8F_1.jpg" alt=""></p>
 <p>则input X=[1,2,3]，然后对X进行one-hot编码：</p>
-<p><img src="/img/%E5%85%AC%E5%BC%8F_2.png" alt=""></p>
+<p><img src="/img/embedding/%E5%85%AC%E5%BC%8F_2.png" alt=""></p>
 <p>那么对输入X的词向量表示应该是X_one_hot×W,如下所示：</p>
-<p><img src="/img/embedding_3.jpg" alt=""></p>
+<p><img src="/img/embedding/embedding_3.jpg" alt=""></p>
 <p>也就是说对于像一个句子样本X=[1,2,3] (1,2,3表示单词在词典中的索引)这样的输入可以先对它one-hot然</p>
 <p>后乘上词嵌入矩阵就可得到这个句子的词嵌入向量表示。要想得到好的词向量，我们需要训练的就是这个</p>
 <p>矩阵W(shape=(input_dim,output_dim))。Embedding层的作用就是训练这个矩阵W并进行词的嵌入为每</p>
@@ -311,6 +311,26 @@ $$
     <section class="widget">
         <h3 class="widget-title">最近文章</h3>
 <ul class="widget-list">
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture8/" title="Cs224n笔记 Lecture8">Cs224n笔记 Lecture8</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture7/" title="Cs224n笔记 Lecture7">Cs224n笔记 Lecture7</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/cs224n_lecture6%E7%AC%94%E8%AE%B0/" title="Cs224n笔记-lecture6">Cs224n笔记-lecture6</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/" title="Cs224n笔记 Lecture5">Cs224n笔记 Lecture5</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture4/" title="Cs224n笔记 Lecture4">Cs224n笔记 Lecture4</a>
+    </li>
     
     <li>
         <a href="https://zdhwg.github.io/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/" title="理解Glove模型">理解Glove模型</a>

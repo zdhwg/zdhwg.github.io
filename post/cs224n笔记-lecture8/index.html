@@ -6,20 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Hugo博客如何新建及上传文章 | WG的博客</title>
-    <meta property="og:title" content="Hugo博客如何新建及上传文章 - WG的博客">
+    <title>Cs224n笔记 Lecture8 | WG的博客</title>
+    <meta property="og:title" content="Cs224n笔记 Lecture8 - WG的博客">
     <meta property="og:type" content="article">
         
-    <meta property="article:published_time" content='2020-02-13T17:48:26&#43;08:00'>
+    <meta property="article:published_time" content='2020-03-15T10:43:29&#43;08:00'>
         
         
-    <meta property="article:modified_time" content='2020-02-13T17:48:26&#43;08:00'>
+    <meta property="article:modified_time" content='2020-03-15T10:43:29&#43;08:00'>
         
     <meta name="Keywords" content="WG,博客,python,NLP,kaggle,机器学习">
-    <meta name="description" content="Hugo博客如何新建及上传文章">
+    <meta name="description" content="Cs224n笔记 Lecture8">
         
     <meta name="author" content="WG">
-    <meta property="og:url" content="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">
+    <meta property="og:url" content="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture8/">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
@@ -136,7 +136,11 @@
 <div class="post-toc" style="position: absolute; top: 188px;">
     <h2 class="post-toc-title">文章目录</h2>
     <div class="post-toc-content">
-        <nav id="TableOfContents"></nav>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#lecture8笔记-machine-translationsequence-to-sequence-and-attention">lecture8笔记-Machine Translation,Sequence-to-sequence and attention</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 <script type="text/javascript">
@@ -168,10 +172,10 @@
 </script>
     <article class="post">
         <header>
-            <h1 class="post-title">Hugo博客如何新建及上传文章</h1>
+            <h1 class="post-title">Cs224n笔记 Lecture8</h1>
         </header>
         <date class="post-meta meta-date">
-            2020年2月13日
+            2020年3月15日
         </date>
         
         
@@ -182,20 +186,32 @@
         
         
         <div class="post-content">
-            <p>​       在hugo博客每次要创建新的博客时，可以在命令行cd到myblog的根目录（或者直接在content/post文件夹下新建一个markdown文件），然后运行以下命令：</p>
-<pre><code>hugo new post/要创建的文件名字.md
-</code></pre><p>​	在写完文章后，要上传到静态网站上，首先要在站点跟目录（myblog)上执行以下命令：</p>
-<pre><code>hugo 或者 hugo --theme=maupassant --buildDrafts --baseUrl=&quot;https://zdhwg.github.io/&quot;
-</code></pre><pre><code>如果要在本地预览在再上传到网站上，可以通过执行以下命令：
-</code></pre>
-<pre><code>hugo server
-</code></pre><pre><code>要发布的话，执行以下命令：
-</code></pre>
-<pre><code>cd public //此文件要同步到远程的github上
-git add .
-git commit -m &quot;此次操作的名称&quot;
-git push 或者 git push origin master 或者 git push -u origin master -f
-</code></pre><p><img src="/img/blog%E7%94%A8%E5%9B%BE.jpg" alt=""></p>
+            <h2 id="lecture8笔记-machine-translationsequence-to-sequence-and-attention">lecture8笔记-Machine Translation,Sequence-to-sequence and attention</h2>
+<p>1.machine tranlation:从一个语言翻译到另一个语言，起源于冷战时期，最初是将俄语翻译成英语。最初是基于规则的，按照词典的对照转换；后来逐渐发展出按统计规则的SMT，但SMT太复杂了，最终神经机器翻译NMT横空出世，机器翻译迎来了新的发展。</p>
+<p>2.NMT依赖于sequence-to-sequence的结构，即通过一个RNN作为encoder将输入的源语言转化为某表征空间中的向量，再通过另一个RNN作为decoder将其转化为目标语言中的句子。我们可以将decoder看做预测目标句子y的下一个单词的语言模型，同时其概率依赖于源句子的encoding，一个将法语翻译成英语的Seq2Seq模型如下图所示:</p>
+<p><img src="/img/lecture8/1.png" alt=""></p>
+<p>训练上述模型时，损失函数与语言模型类似，即各步目标单词的log probability的相反数的平均值，在反向传播过程中，梯度可以传播到encoder层，即所谓的&quot;end-to-end&rdquo;,训练过程如下图所示：</p>
+<p><img src="/img/lecture8/2.jpg" alt=""></p>
+<p>在decoder时，如果每一步都选取概率最大的单词并将其作为下一步decoder的输入（greedy decoder)，这时对于翻译整个句子来说可能不是最优的选择，只要有一个时间步的单词出错后，后面的单词可能都会受影响。如何解决这个问题？</p>
+<p>解决上述问题的办法是Beam search decoding，核心思想是在解码的每一步，保留k个最有可能的选项（k为beam size)，k一般取值为5-10。最有可能的选项是通过分数值选择出来的，每个可能单词的分数值是负数，所以分数越低越好。这里存在翻译的句子长度越长分数值越高的情况，为了避免倾向于选择长翻译，在评分时需要是做一个归一化：</p>
+<p><img src="/img/lecture8/3.jpg" alt=""></p>
+<p>当k=2时，beam search decoding的流程如下所示，注意每一步都是选择前k个最有可能的选项。</p>
+<p><img src="/img/lecture8/4.png" alt=""></p>
+<p>绿色字体即为最后选择出的得分最高的翻译句子；beam search结束的标志与greedy seach结束的标志不一样，greedy search结束的标志是出现<!-- raw HTML omitted --> token，在beam search会出现多个<!-- raw HTML omitted -->，此时结束的停止条件为达到预设的时间步T或者得到了至少n个预先设定的翻译句子。</p>
+<p>NMT的缺点是不可解释性以及不能用规则来引导翻译过程。</p>
+<p>3.衡量机器翻译好坏的指标是BLEU(<strong>B</strong>i<strong>l</strong>ingual <strong>E</strong>valuation <strong>U</strong>nderstudy)，基本思想是看machine translation的n-gram在人工翻译中出现的概率。</p>
+<p><img src="/img/lecture8/5.jpg" alt=""></p>
+<p>BLEU这个指标并不是完美的，有很多关于评价机器翻译的指标也在研究中。</p>
+<p>4.在NMT的发展过程中，attention机制的出现解决了seq2seq模型的信息&quot;瓶颈&rdquo;，在seq2seq模型中，我们用Encoder RNN的最后一个神经元的隐状态作为Decoder RNN的初始隐状态，也就是说Encoder的最后一个隐状态向量需要承载源句子的所有信息，成为整个模型的“信息”瓶颈。</p>
+<p>宏观上来说，Attention把Decoder RNN的每个隐层和Encoder RNN的每个隐层直接连起来了，还是“减少中间商赚差价”的思路，由于有这个捷径，Encoder RNN的最后一个隐状态不再是“信息”瓶颈，信息还可以通过Attention的很多“直连”线路进行传输。</p>
+<p><img src="/img/lecture8/6.jpg" alt=""></p>
+<p>Attention的过程如下所示：</p>
+<p><img src="/img/lecture8/7.png" alt=""></p>
+<p>Attention机制不仅只用于机器翻译中，在其他NLP领域也有应用，attention更一般的定义如下：</p>
+<blockquote>
+<p>给定一系列values向量集合H，再给定一个查询（query）s，query决定着values中哪一个向量需要被注意。一般使用s和H中的每一个向量做点积，得到s对H的注意力分布，然后用这个分布对H进行平均加权的到H的attention output</p>
+</blockquote>
+<p>另外，attention机制的公式还有许多其他的变体，但总体思路是不变的。</p>
 
         </div>
 
@@ -203,7 +219,7 @@ git push 或者 git push origin master 或者 git push -u origin master -f
 <div class="post-archive">
     <ul class="post-copyright">
         <li><strong>原文作者：</strong><a rel="author" href="https://zdhwg.github.io">WG</a></li>
-        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture8/">https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture8/</a></li>
         <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
     </ul>
 </div>
@@ -217,9 +233,15 @@ git push 或者 git push origin master 或者 git push -u origin master -f
     <h2>See Also</h2>
     <ul class="listing">
         
-        <li><a href="/archives/">归档</a></li>
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture7/">Cs224n笔记 Lecture7</a></li>
         
-        <li><a href="/search/">搜索</a></li>
+        <li><a href="/post/cs224n_lecture6%E7%AC%94%E8%AE%B0/">Cs224n笔记-lecture6</a></li>
+        
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/">Cs224n笔记 Lecture5</a></li>
+        
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture4/">Cs224n笔记 Lecture4</a></li>
+        
+        <li><a href="/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/">理解Glove模型</a></li>
         
     </ul>
 </div>

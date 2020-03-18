@@ -6,20 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Hugo博客如何新建及上传文章 | WG的博客</title>
-    <meta property="og:title" content="Hugo博客如何新建及上传文章 - WG的博客">
+    <title>Cs224n笔记 Lecture5 | WG的博客</title>
+    <meta property="og:title" content="Cs224n笔记 Lecture5 - WG的博客">
     <meta property="og:type" content="article">
         
-    <meta property="article:published_time" content='2020-02-13T17:48:26&#43;08:00'>
+    <meta property="article:published_time" content='2020-03-10T21:42:13&#43;08:00'>
         
         
-    <meta property="article:modified_time" content='2020-02-13T17:48:26&#43;08:00'>
+    <meta property="article:modified_time" content='2020-03-10T21:42:13&#43;08:00'>
         
     <meta name="Keywords" content="WG,博客,python,NLP,kaggle,机器学习">
-    <meta name="description" content="Hugo博客如何新建及上传文章">
+    <meta name="description" content="Cs224n笔记 Lecture5">
         
     <meta name="author" content="WG">
-    <meta property="og:url" content="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">
+    <meta property="og:url" content="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href='/css/normalize.css'>
@@ -136,7 +136,11 @@
 <div class="post-toc" style="position: absolute; top: 188px;">
     <h2 class="post-toc-title">文章目录</h2>
     <div class="post-toc-content">
-        <nav id="TableOfContents"></nav>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#lecture5-dependency-parsing笔记">lecture5-Dependency Parsing(笔记)</a></li>
+  </ul>
+</nav>
     </div>
 </div>
 <script type="text/javascript">
@@ -168,10 +172,10 @@
 </script>
     <article class="post">
         <header>
-            <h1 class="post-title">Hugo博客如何新建及上传文章</h1>
+            <h1 class="post-title">Cs224n笔记 Lecture5</h1>
         </header>
         <date class="post-meta meta-date">
-            2020年2月13日
+            2020年3月10日
         </date>
         
         
@@ -182,20 +186,28 @@
         
         
         <div class="post-content">
-            <p>​       在hugo博客每次要创建新的博客时，可以在命令行cd到myblog的根目录（或者直接在content/post文件夹下新建一个markdown文件），然后运行以下命令：</p>
-<pre><code>hugo new post/要创建的文件名字.md
-</code></pre><p>​	在写完文章后，要上传到静态网站上，首先要在站点跟目录（myblog)上执行以下命令：</p>
-<pre><code>hugo 或者 hugo --theme=maupassant --buildDrafts --baseUrl=&quot;https://zdhwg.github.io/&quot;
-</code></pre><pre><code>如果要在本地预览在再上传到网站上，可以通过执行以下命令：
-</code></pre>
-<pre><code>hugo server
-</code></pre><pre><code>要发布的话，执行以下命令：
-</code></pre>
-<pre><code>cd public //此文件要同步到远程的github上
-git add .
-git commit -m &quot;此次操作的名称&quot;
-git push 或者 git push origin master 或者 git push -u origin master -f
-</code></pre><p><img src="/img/blog%E7%94%A8%E5%9B%BE.jpg" alt=""></p>
+            <h2 id="lecture5-dependency-parsing笔记">lecture5-Dependency Parsing(笔记)</h2>
+<p>1.为了正确解释理解语言，首先需要理解句子的结构。例如下面的例子：</p>
+<pre><code>San Jose cops kill man with knife
+</code></pre><p>这句话可能会有歧义，一种理解是：警察用刀杀了那个男子。</p>
+<p>这种翻译的理解是：</p>
+<ul>
+<li><code>cops</code> 是 <code>kill</code> 的 <code>subject</code> (subject 指 主语)</li>
+<li><code>man</code> 是 <code>kill</code>的 <code>object</code> (object 指 宾语)</li>
+<li><code>knife</code> 是 <code>kill</code> 的 <code>modifier</code> (modifier 指 修饰符)</li>
+</ul>
+<p>另一种理解是：警察杀了那个有刀的男子。</p>
+<p>在这里：<code>knife</code> 是 <code>man</code> 的 <code>modifier</code> (名词修饰符，简称为 <code>nmod</code> )</p>
+<p>2.对于句法结构(syntactic structure)分析，主要有两种方式:Constituency Parsing与Dependency Parsing。</p>
+<p>Constituency Parsing主要用phrase structure grammer即短语语法来不断的将词语整理成嵌套的组成成分，又被称为context-free grammers，简写做CFG。</p>
+<p>其主要步骤是先对每个词做词性分析part of speech, 简称POS，然后再将其组成短语，再将短语不断递归构成更大的短语。</p>
+<p>3.句法结构分析的另一种方式是Denpendency Parsing,Dependency Structure展示了词语之前的依赖关系,通常用箭头表示其依存关系，有时也会在箭头上标出其具体的语法关系，如是主语还是宾语关系等。</p>
+<p>Dependency Structure有两种表现形式，一种是直接在句子上标出依存关系箭头及语法关系，另一种是将其做成树状机构（Dependency Tree Graph）。</p>
+<p>Dependency Parsing可以看做是给定输入句子 <img src="https://www.zhihu.com/equation?tex=S%3Dw_0w_1...w_n" alt="[公式]"> （其中w0常常是fake ROOT，使得句子中每一个词都依赖于另一个节点）构建对应的Dependency Tree Graph的任务。而这个树如何构建呢？一个有效的方法是Transition-based Dependency Parsing。</p>
+<p><strong>Transition-based Dependency Parsing</strong></p>
+<p>Transition-based Dependency Parsing可以看做是state machine，对于 <img src="https://www.zhihu.com/equation?tex=S%3Dw_0w_1...w_n" alt="[公式]"> ，state由三部分构成 <img src="https://www.zhihu.com/equation?tex=%28%5Csigma%2C+%5Cbeta%2C+A%29" alt="[公式]"> 。</p>
+<p><strong>𝜎</strong>是S中若干wi构成的stack。𝜷是S中若干wi构成的buffer。</p>
+<p>未完待续。。。</p>
 
         </div>
 
@@ -203,7 +215,7 @@ git push 或者 git push origin master 或者 git push -u origin master -f
 <div class="post-archive">
     <ul class="post-copyright">
         <li><strong>原文作者：</strong><a rel="author" href="https://zdhwg.github.io">WG</a></li>
-        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/">https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/</a></li>
         <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
     </ul>
 </div>
@@ -217,9 +229,15 @@ git push 或者 git push origin master 或者 git push -u origin master -f
     <h2>See Also</h2>
     <ul class="listing">
         
-        <li><a href="/archives/">归档</a></li>
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture4/">Cs224n笔记 Lecture4</a></li>
         
-        <li><a href="/search/">搜索</a></li>
+        <li><a href="/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/">理解Glove模型</a></li>
+        
+        <li><a href="/post/keras%E4%B8%ADembedding%E5%B1%82%E7%9A%84%E4%BD%9C%E7%94%A8/">Keras中embedding层的作用</a></li>
+        
+        <li><a href="/about/">关于我</a></li>
+        
+        <li><a href="/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/">Hugo博客如何新建及上传文章</a></li>
         
     </ul>
 </div>
