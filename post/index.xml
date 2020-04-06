@@ -6,10 +6,91 @@
     <description>Recent content in Posts on WG的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 15 Mar 2020 10:43:29 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 02 Apr 2020 20:56:15 +0800</lastBuildDate>
     
 	<atom:link href="https://zdhwg.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>微博新冠肺炎的舆论分析</title>
+      <link>https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E6%96%B0%E5%86%A0%E8%82%BA%E7%82%8E%E7%9A%84%E8%88%86%E8%AE%BA%E5%88%86%E6%9E%90/</link>
+      <pubDate>Thu, 02 Apr 2020 20:56:15 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E6%96%B0%E5%86%A0%E8%82%BA%E7%82%8E%E7%9A%84%E8%88%86%E8%AE%BA%E5%88%86%E6%9E%90/</guid>
+      <description>微博新冠肺炎的舆论分析 1.微博数据的抓取 在抓取微博数据时，有几种选择方式，一是按照热度排名抓取微博，这种选择方式会造成抓取的微博数量过于少，1月份的微博数量只有几页；另一种选择方式是按照原创抓取，可能会更能反应民众的真实情绪，这个后续再加以讨论。 目前常用的分词方法主要有三种： (1</description>
+    </item>
+    
+    <item>
+      <title>微博爬虫</title>
+      <link>https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/</link>
+      <pubDate>Wed, 01 Apr 2020 21:14:13 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/</guid>
+      <description>构建微博爬虫系统 本文的主要目的为记录微博爬虫的学习过程，最终的目的为实现爬取微博上的信息，可以完成定向信息的检索，将一定时间内的微博爬取下来。 1.微博数据不同于qq空间和朋友圈，是唯一一个可以爬的社交媒体平台。微博数据中可以爬取到数据维度有： 字段 说明 weibo_url 这条微博的URL，可以作为这</description>
+    </item>
+    
+    <item>
+      <title>微博爬虫</title>
+      <link>https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/</link>
+      <pubDate>Wed, 01 Apr 2020 21:14:13 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/</guid>
+      <description>构建微博爬虫系统 本文的主要目的为记录微博爬虫的学习过程，最终的目的为实现爬取微博上的信息，可以完成定向信息的检索，将一定时间内的微博爬取下来。 1.微博数据不同于qq空间和朋友圈，是唯一一个可以爬的社交媒体平台。微博数据中可以爬取到数据维度有： 字段 说明 weibo_url 这条微博的URL，可以作为这</description>
+    </item>
+    
+    <item>
+      <title>Python批量执行多个py文件</title>
+      <link>https://zdhwg.github.io/post/python%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8C%E5%A4%9A%E4%B8%AApy%E6%96%87%E4%BB%B6/</link>
+      <pubDate>Sun, 29 Mar 2020 11:01:43 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/python%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8C%E5%A4%9A%E4%B8%AApy%E6%96%87%E4%BB%B6/</guid>
+      <description>python实现批量顺序执行同目录下的py文件 今天在看知乎时看到的一个技巧，在用jupyter notebook调参时，为了避免凌晨坐在电脑前面看着电脑运行，可以写个按顺序执行多个python文件的脚本。 假如我要执行code目录下的python程序，假设该目录下有1.py,2.py</description>
+    </item>
+    
+    <item>
+      <title>情感分析</title>
+      <link>https://zdhwg.github.io/post/%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/</link>
+      <pubDate>Thu, 26 Mar 2020 15:17:24 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/</guid>
+      <description>情感分析 1.情感分析实验总体思路是对已有的外卖评价，利用三种来源的词向量（词向量的来源有Word2vec、Glove和BERT等），将文本映射到向量空间后，利用聚类（HCM，KNN，层次聚类法）聚类，其中聚类方式中可以选择的距离公式大致分为三种：欧式距离、余弦距离和MWD距离。利</description>
+    </item>
+    
+    <item>
+      <title>Python爬虫 爬取视频</title>
+      <link>https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E8%A7%86%E9%A2%91/</link>
+      <pubDate>Fri, 20 Mar 2020 11:15:27 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E8%A7%86%E9%A2%91/</guid>
+      <description>Python爬虫 爬取视频 现在很多视频网站采用流媒体技术进行播放视频，一种常见的方案是m3u8文件+ts文件 。 m3u8是苹果公司推出一种视频播放标准，是m3u的一种，不过编码方式是utf-8，是一种文件检索格式，将视频切割成一小段一小段的ts格式的视频文件，然后存在服务器中（现在为</description>
+    </item>
+    
+    <item>
+      <title>cs224n笔记 Lecture10</title>
+      <link>https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture10/</link>
+      <pubDate>Thu, 19 Mar 2020 20:35:51 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture10/</guid>
+      <description>cs224n笔记 Lecture10 -(Textual) Question Answerin 问答系统(Question Answering)实际需求很多，比如我们常用的谷歌搜索就可看做是问答系统。通常我们可以将问答系统看做两部分：从海量的文件中，找到与问题相关的可能包含回答的文件，这一过程是传统的information retrieval；从文件或段</description>
+    </item>
+    
+    <item>
+      <title>Python爬虫 爬取图片</title>
+      <link>https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E5%9B%BE%E7%89%87/</link>
+      <pubDate>Thu, 19 Mar 2020 09:46:53 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E5%9B%BE%E7%89%87/</guid>
+      <description>python爬虫-爬取图片 上次爬取文本的网站是静态网站，今天尝试爬取动态网站上的图片。静态网站和动态网站的区别是什么呢？首先静态网站的特点如下： 静态网站是最初的建站方式，浏览者所看到的每个页面是建站者上传到服务器上的一个 html （ htm ）文件，这种网站每增加、删除、修改一个页面，都必须重新</description>
+    </item>
+    
+    <item>
+      <title>Python爬虫-爬取文本</title>
+      <link>https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E6%96%87%E6%9C%AC/</link>
+      <pubDate>Tue, 17 Mar 2020 22:08:24 +0800</pubDate>
+      
+      <guid>https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E6%96%87%E6%9C%AC/</guid>
+      <description>python 爬虫-爬取文本 以前做项目时需要爬虫，总是现学现用，现在抽个时间把爬虫的知识点整理一下，以便以后查看。 网络爬虫（web spider)根据网页地址（URL）爬取网页内容，在用爬虫之前，一般需要到指定的URL处审查元素（鼠标右键），查看目标网页的HTML格式分布，HTML是浏览器搭建</description>
+    </item>
     
     <item>
       <title>Cs224n笔记 Lecture8</title>
@@ -62,7 +143,7 @@
       <pubDate>Mon, 17 Feb 2020 19:49:09 +0800</pubDate>
       
       <guid>https://zdhwg.github.io/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/</guid>
-      <description>Glove是词的向量化表示方法之一，常用的词的向量化表示方法有：word2vec、glove、ELMo、 BERT。首先先介绍一下除Glove以外的其他三种方法。 word2vec word2vec是2013年提出的方法， 它的核心思想是通过词的上下文得到词的向量化表示，有两种方法： CBOW（通过附近</description>
+      <description>Glove是词的向量化表示方法之一，常用的词的向量化表示方法有：word2vec、glove、ELMo、BERT。首先先介绍一下除Glove以外的其他三种方法。 word2vec word2vec是2013年提出的方法， 它的核心思想是通过词的上下文得到词的向量化表示，有两种方法：CBOW（通过附近</description>
     </item>
     
     <item>

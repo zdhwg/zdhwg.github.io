@@ -182,84 +182,50 @@
         
         
         <div class="post-content">
-            <p>Glove是词的向量化表示方法之一，常用的词的向量化表示方法有：word2vec、glove、ELMo、</p>
-<p>BERT。首先先介绍一下除Glove以外的其他三种方法。</p>
+            <p>Glove是词的向量化表示方法之一，常用的词的向量化表示方法有：word2vec、glove、ELMo、BERT。首先先介绍一下除Glove以外的其他三种方法。</p>
 <p><strong>word2vec</strong></p>
-<p>word2vec是2013年提出的方法， 它的核心思想是通过词的上下文得到词的向量化表示，有两种方法：</p>
-<p>CBOW（通过附近词预测中心词）、Skip-gram（通过中心词预测附近的词），如下图所示：</p>
+<p>word2vec是2013年提出的方法， 它的核心思想是通过词的上下文得到词的向量化表示，有两种方法：CBOW（通过附近词预测中心词）、Skip-gram（通过中心词预测附近的词），如下图所示：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/%E8%AF%8D%E5%90%91%E9%87%8F%E5%9B%BE.png" alt=""></p>
-<p>在用CBOW或者Skip-gram方法训练词向量的过程中，因为词汇表大和样本不均衡，一般会采用多层</p>
-<p>softmax或负采样优化的方法。</p>
+<p>在用CBOW或者Skip-gram方法训练词向量的过程中，因为词汇表大和样本不均衡，一般会采用多层softmax或负采样优化的方法。</p>
 <p><strong>ELMo</strong></p>
-<p>下面介绍ELMo方法， word2vec和glove存在一个问题，<strong>即词在不同的语境下其实有不同的含义，</strong></p>
-<p><strong>而这两个模型词在不同语境下的向量表示是相同的</strong>，Elmo就是针对这一点进行了优化。ELMo的作</p>
-<p>者认为ELMo有两个优势：</p>
+<p>下面介绍ELMo方法， word2vec和glove存在一个问题，**即词在不同的语境下其实有不同的含义，**<strong>而这两个模型词在不同语境下的向量表示是相同的</strong>，Elmo就是针对这一点进行了优化。ELMo的作者认为ELMo有两个优势：</p>
 <ol>
 <li>能够学习到单词用法的复杂特性。</li>
 <li>学习到这些复杂用法在不同上下文的变化。</li>
 </ol>
-<p>针对点1，作者是通过多层的stack LSTM去学习词的复杂用法，不同层的output可以获得不同层次</p>
-<p>的词法特</p>
-<p>征。针对点2，作者通过pre-train+fine tuning的方式实现，先在大语料库上进行pre-train，再在下游任务</p>
-<p>的语料库上进行fine tuning。</p>
+<p>针对点1，作者是通过多层的stack LSTM去学习词的复杂用法，不同层的output可以获得不同层次的词法特征。针对点2，作者通过pre-train+fine tuning的方式实现，先在大语料库上进行pre-train，再在下游任务的语料库上进行fine tuning。</p>
 <p><strong>ELMo的具体实现方式：</strong></p>
-<p>ELMo来自于Embedding from Language Models的简写，此处的Language Models具体的实现方</p>
-<p>式是LSTM，一开始的训练目标可以表示为如下的形式：</p>
+<p>ELMo来自于Embedding from Language Models的简写，此处的Language Models具体的实现方式是LSTM，一开始的训练目标可以表示为如下的形式：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/1.png" alt=""></p>
-<p>具体来说是通过<strong>双方向</strong>预测单词，前向过程中，用1～k-1的词去预测第k个词，后向过程中，用k+1</p>
-<p>～N的</p>
-<p>词去预测第k个词。具体的编码方式作者采用了LSTM，可以表示为：</p>
+<p>具体来说是通过<strong>双方向</strong>预测单词，前向过程中，用1～k-1的词去预测第k个词，后向过程中，用k+1～N的词去预测第k个词。具体的编码方式作者采用了LSTM，可以表示为：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/2.jpg" alt=""></p>
-<p>通过LSTM编码Tokens，用第k-1个Token的隐藏层输出预测第k个Token，预测的方法是用一个</p>
-<p>softmax做一个分类，其中 <img src="https://www.zhihu.com/equation?tex=%5CTheta_x" alt="[公式]"> 是token的向量表示， <img src="https://www.zhihu.com/equation?tex=%5CTheta_s" alt="[公式]"> 是softmax的参数。这种双向LSTM堆</p>
-<p>叠L层，stack-RNN的方式也就是每一层隐藏层的输出作为下一层的输入。 那么对于每个Token会有</p>
-<p>2L+1个向量表示，双向所以每层2个，+1是token输出层的向量表示，作者将2L+1个向量组合起来</p>
-<p>得到ELMo每个token的向量表示：</p>
+<p>通过LSTM编码Tokens，用第k-1个Token的隐藏层输出预测第k个Token，预测的方法是用一个softmax做一个分类，其中 <img src="https://www.zhihu.com/equation?tex=%5CTheta_x" alt="[公式]"> 是token的向量表示， <img src="https://www.zhihu.com/equation?tex=%5CTheta_s" alt="[公式]"> 是softmax的参数。这种双向LSTM堆叠L层，stack-RNN的方式也就是每一层隐藏层的输出作为下一层的输入。 那么对于每个Token会有2L+1个向量表示，双向所以每层2个，+1是token输出层的向量表示，作者将2L+1个向量组合起来得到ELMo每个token的向量表示：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/3.jpg" alt=""></p>
-<p>其中 <img src="https://www.zhihu.com/equation?tex=h_%7Bk%2Cj%7D%5E%7BLM%7D" alt="[公式]"> 是对于token k的第j层的隐藏层输出，当j=0的时候表示输入层token的向量表示，这个</p>
-<p>向量表示可以通过CNN或Highway等网络引入char-level的特征。<img src="https://www.zhihu.com/equation?tex=s_j%5E%7Btask%7D" alt="[公式]"> 是一个softmax的归一化，</p>
-<p><img src="https://www.zhihu.com/equation?tex=%5Cgamma%5E%7Btask%7D" alt="[公式]"> 是一个放缩的参数，可以让目标模型对ELMo的向量进行放缩。 经过两层双向LSTM提取特</p>
-<p>征，又针对下游任务定制词向量，效果比word2vec和glove要好也在情理之中。</p>
+<p>其中 <img src="https://www.zhihu.com/equation?tex=h_%7Bk%2Cj%7D%5E%7BLM%7D" alt="[公式]"> 是对于token k的第j层的隐藏层输出，当j=0的时候表示输入层token的向量表示，这个向量表示可以通过CNN或Highway等网络引入char-level的特征。<img src="https://www.zhihu.com/equation?tex=s_j%5E%7Btask%7D" alt="[公式]"> 是一个softmax的归一化，</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cgamma%5E%7Btask%7D" alt="[公式]"> 是一个放缩的参数，可以让目标模型对ELMo的向量进行放缩。 经过两层双向LSTM提取特征，又针对下游任务定制词向量，效果比word2vec和glove要好也在情理之中</p>
 <p><strong>BERT</strong></p>
 <p>在NLP中，一共有4大类任务：</p>
 <ul>
 <li>序列标注：分词／词性标注／命名实体识别&hellip;</li>
 <li>分类任务：文本分类／情感分析&hellip;</li>
-<li><em>句子关系判断：自然语言推理／深度文本匹配／问答系统&hellip;</em></li>
+<li>句子关系判断：自然语言推理／深度文本匹配／问答系统&hellip;</li>
 <li>生成式任务：机器翻译／文本摘要生成&hellip;</li>
 </ul>
-<p>BERT为这4大类任务的前3个都设计了简单至极的下游接口，省去了各种花哨的Attention、stack等</p>
-<p>复杂的网络结构，且实验效果全面取得了大幅度的提升。 BERT的工作方式与ELMo的工作方式是类</p>
-<p>似的，都是现在大规模的语料库中pre-train，然后将下游任务输入，进行比较轻量级的fine-</p>
-<p>tuning。</p>
-<p>BERT的工作方式采用了Transformer(Attention is all you need)，详细的工作方式后续再在介绍。</p>
-<p>下面着重介绍Glove模型：</p>
+<p>BERT为这4大类任务的前3个都设计了简单至极的下游接口，省去了各种花哨的Attention、stack等复杂的网络结构，且实验效果全面取得了大幅度的提升。 BERT的工作方式与ELMo的工作方式是类似的，都是现在大规模的语料库中pre-train，然后将下游任务输入，进行比较轻量级的fine-tuning。 BERT的工作方式采用了Transformer(Attention is all you need)，详细的工作方式后续再在介绍。下面着重介绍Glove模型：</p>
 <p><strong>Glove</strong></p>
-<p>Cbow/Skip-Gram 是一个local context window的方法，缺乏了整体的词和词的关系，负样本采用</p>
-<p>sample的方式会缺失词的关系信息。另外，直接训练Skip-Gram类型的算法，很容易使得高曝光词</p>
-<p>汇得到过多的权重。Global Vector(Glove)融合了矩阵分解Latent Semantic Analysis (LSA)的全局统</p>
-<p>计信息和local context window优势。融入全局的先验统计信息，可以加快模型的训练速度，又可</p>
-<p>以控制词的相对权重。</p>
-<p>skip-gram、CBOW每次都是用一个窗口中的信息更新出词向量，但是Glove则是用了全局的信息</p>
-<p>（共线矩阵），也就是多个窗口进行更新。下面详细介绍。</p>
-<p>方法概述：首先基于语料库构建词的共现矩阵，然后基于共现矩阵和GloVe模型学习词向量。</p>
-<p>设共现矩阵为X，其元素为Xi,j。Xi,j的意义是在整个语料库中，单词i和单词j共同出现在一个窗口中</p>
-<p>的次数。</p>
+<p>Cbow/Skip-Gram 是一个local context window的方法，缺乏了整体的词和词的关系，负样本采用sample的方式会缺失词的关系信息。另外，直接训练Skip-Gram类型的算法，很容易使得高曝光词汇得到过多的权重。Global Vector(Glove)融合了矩阵分解Latent Semantic Analysis (LSA)的全局统计信息和local context window优势。融入全局的先验统计信息，可以加快模型的训练速度，又可以控制词的相对权重。skip-gram、CBOW每次都是用一个窗口中的信息更新出词向量，但是Glove则是用了全局的信息（共线矩阵），也就是多个窗口进行更新。下面详细介绍。</p>
+<p>方法概述：首先基于语料库构建词的共现矩阵，然后基于共现矩阵和GloVe模型学习词向量。设共现矩阵为X，其元素为Xi,j。Xi,j的意义是在整个语料库中，单词i和单词j共同出现在一个窗口中的次数。</p>
 <p>举个栗子：设有语料库</p>
 <pre><code>i love you but you love him i am sad
-</code></pre><p>这个小小的语料库只有1个句子，涉及到7个单词：i、love、you、but、him、am、sad。如果我们</p>
-<p>采用一个窗口宽度为5（左右长度都为2）的统计窗口，那么就有以下窗口内容：</p>
+</code></pre><p>这个小小的语料库只有1个句子，涉及到7个单词：i、love、you、but、him、am、sad。如果我们采用一个窗口宽度为5（左右长度都为2）的统计窗口，那么就有以下窗口内容：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/4.png" alt=""></p>
-<p>窗口0、1长度小于5是因为中心词左侧内容少于2个，同理窗口8、9长度也小于5。 以窗口5为例说</p>
-<p>明如何构造共现矩阵：中心词为love，语境词为but、you、him、i；则执行：</p>
+<p>窗口0、1长度小于5是因为中心词左侧内容少于2个，同理窗口8、9长度也小于5。 以窗口5为例说明如何构造共现矩阵：中心词为love，语境词为but、you、him、i；则执行：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/5.png" alt=""></p>
 <p>使用窗口将整个语料库遍历一遍，即可得到共现矩阵X。</p>
 <p><strong>使用Glove模型训练词向量</strong></p>
 <p>先看模型，代价函数长这个样子：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/6.png" alt=""></p>
-<p>vi,vj是单词i和单词j的词向量，bi,bj是两个标量（作者定义的偏差项），f是权重函数（具体函数公式</p>
-<p>及功能后面介绍），N是词汇表的大小（共现矩阵维度为N*N）。可以看到，GloVe模型没有使用神</p>
-<p>经网络的方法。</p>
+<p>vi,vj是单词i和单词j的词向量，bi,bj是两个标量（作者定义的偏差项），f是权重函数（具体函数公式及功能后面介绍），N是词汇表的大小（共现矩阵维度为N*N）。可以看到，GloVe模型没有使用神经网络的方法。</p>
 <p><strong>模型怎么来的</strong></p>
 <p>那么作者为什么这么构造模型呢？首先定义几个符号：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/7.png" alt=""></p>
@@ -270,21 +236,16 @@
 <p>两个条件概率的比率。</p>
 <p>作者发现，两个条件概率的比率这个指标是有规律的，规律统计在下表：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/10.png" alt=""></p>
-<p>思想：假设我们已经得到了词向量，如果用词向量vi、vj、vk通过某种函数计算ratio_i,j,k，能够得到</p>
-<p>和上表中一样的规律的话，就意味着我们的词向量中蕴含了共现矩阵中所蕴含的信息。</p>
-<p>设用词向量vi、vj 、vk计算ratio_i,j,k的函数为<em>g</em>(vi,vj,vk) (我们先不去管具体的函数形式），那么应该有：</p>
+<p>思想：假设我们已经得到了词向量，如果用词向量vi、vj、vk通过某种函数计算ratio_i,j,k，能够得到和上表中一样的规律的话，就意味着我们的词向量中蕴含了共现矩阵中所蕴含的信息。设用词向量vi、vj 、vk计算ratio_i,j,k的函数为<em>g</em>(vi,vj,vk) (我们先不去管具体的函数形式），那么应该有：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/11.jpg" alt=""></p>
-<p>但是上面的代价函数太过于复杂，计算复杂度很高（为N的3次方），下面考虑化简它：</p>
-<p>作者的思路是这样的：</p>
-<p>1.要考虑单词i和单词j之间的关系，函数g中要有vi-vj这样的一项；（在线性空间中考虑两个向量的相似性，这样的</p>
-<p>差项是一个合理的选择）</p>
+<p>但是上面的代价函数太过于复杂，计算复杂度很高（为N的3次方），下面考虑化简它：作者的思路是这样的：</p>
+<p>1.要考虑单词i和单词j之间的关系，函数g中要有vi-vj这样的一项；（在线性空间中考虑两个向量的相似性，这样的差项是一个合理的选择）</p>
 <p>2.ratio_i,j,k是一个变量，但输入是向量，所以可通过内积项将向量变为标量，所以有（vi-vj)^T*vk这么一项。</p>
 <p>3.最后在函数的外面一层加上一个指数运算exp(),套上exp()的目的如下：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/12.jpg" alt=""></p>
 <p>然后最终的化简方法就是分别让分子相等，分母相等：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/13.png" alt=""></p>
-<p>化简后的复杂度大大减小(为N的平方)，加入指数函数运算的目的是让差形式转化为商形式，最终可以分别让分子</p>
-<p>和分母相等。</p>
+<p>化简后的复杂度大大减小(为N的平方)，加入指数函数运算的目的是让差形式转化为商形式，最终可以分别让分子和分母相等。</p>
 <p>化简之后还有一个问题：</p>
 <p><img src="/img/%E7%90%86%E8%A7%A3glove%E6%A8%A1%E5%9E%8B/14.png" alt=""></p>
 <p>以上即为整个glove的模型。</p>
@@ -364,35 +325,43 @@
 <ul class="widget-list">
     
     <li>
+        <a href="https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E6%96%B0%E5%86%A0%E8%82%BA%E7%82%8E%E7%9A%84%E8%88%86%E8%AE%BA%E5%88%86%E6%9E%90/" title="微博新冠肺炎的舆论分析">微博新冠肺炎的舆论分析</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/" title="微博爬虫">微博爬虫</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/" title="微博爬虫">微博爬虫</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8C%E5%A4%9A%E4%B8%AApy%E6%96%87%E4%BB%B6/" title="Python批量执行多个py文件">Python批量执行多个py文件</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/" title="情感分析">情感分析</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E8%A7%86%E9%A2%91/" title="Python爬虫 爬取视频">Python爬虫 爬取视频</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture10/" title="cs224n笔记 Lecture10">cs224n笔记 Lecture10</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E5%9B%BE%E7%89%87/" title="Python爬虫 爬取图片">Python爬虫 爬取图片</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E6%96%87%E6%9C%AC/" title="Python爬虫-爬取文本">Python爬虫-爬取文本</a>
+    </li>
+    
+    <li>
         <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture8/" title="Cs224n笔记 Lecture8">Cs224n笔记 Lecture8</a>
-    </li>
-    
-    <li>
-        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture7/" title="Cs224n笔记 Lecture7">Cs224n笔记 Lecture7</a>
-    </li>
-    
-    <li>
-        <a href="https://zdhwg.github.io/post/cs224n_lecture6%E7%AC%94%E8%AE%B0/" title="Cs224n笔记-lecture6">Cs224n笔记-lecture6</a>
-    </li>
-    
-    <li>
-        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/" title="Cs224n笔记 Lecture5">Cs224n笔记 Lecture5</a>
-    </li>
-    
-    <li>
-        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture4/" title="Cs224n笔记 Lecture4">Cs224n笔记 Lecture4</a>
-    </li>
-    
-    <li>
-        <a href="https://zdhwg.github.io/post/%E7%90%86%E8%A7%A3Glove%E6%A8%A1%E5%9E%8B/" title="理解Glove模型">理解Glove模型</a>
-    </li>
-    
-    <li>
-        <a href="https://zdhwg.github.io/post/keras%E4%B8%ADembedding%E5%B1%82%E7%9A%84%E4%BD%9C%E7%94%A8/" title="Keras中embedding层的作用">Keras中embedding层的作用</a>
-    </li>
-    
-    <li>
-        <a href="https://zdhwg.github.io/post/hugo%E5%8D%9A%E5%AE%A2%E5%A6%82%E4%BD%95%E6%96%B0%E5%BB%BA%E5%8F%8A%E4%B8%8A%E4%BC%A0%E6%96%87%E7%AB%A0/" title="Hugo博客如何新建及上传文章">Hugo博客如何新建及上传文章</a>
     </li>
     
 </ul>

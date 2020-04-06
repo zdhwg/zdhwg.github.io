@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Python爬虫 爬取图片 | WG的博客</title>
+    <meta property="og:title" content="Python爬虫 爬取图片 - WG的博客">
+    <meta property="og:type" content="article">
+        
+    <meta property="article:published_time" content='2020-03-19T09:46:53&#43;08:00'>
+        
+        
+    <meta property="article:modified_time" content='2020-03-19T09:46:53&#43;08:00'>
+        
+    <meta name="Keywords" content="WG,博客,python,NLP,kaggle,机器学习">
+    <meta name="description" content="Python爬虫 爬取图片">
+        
+    <meta name="author" content="WG">
+    <meta property="og:url" content="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E5%9B%BE%E7%89%87/">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href='/css/normalize.css'>
+    <link rel="stylesheet" href='/css/style.css'>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    
+
+
+    
+    
+        <link rel="stylesheet" href='/css/douban.css'>
+    
+        <link rel="stylesheet" href='/css/other.css'>
+    
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css">
+</head>
+
+
+<body>
+    <header id="header" class="clearfix">
+    <div class="container">
+        <div class="col-group">
+            <div class="site-name ">
+                
+                    <a id="logo" href="https://zdhwg.github.io">
+                        WG的博客
+                    </a>
+                
+                <p class="description">陌上花开，可缓缓醉矣。</p>
+            </div>
+            <div>
+                <nav id="nav-menu" class="clearfix">
+                    <a class="current" href="https://zdhwg.github.io">首页</a>
+                    
+                    <a  href="https://zdhwg.github.io/archives/" title="归档">归档</a>
+                    
+                    <a  href="https://zdhwg.github.io/about/" title="关于">关于</a>
+                    
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+    <div id="body">
+        <div class="container">
+            <div class="col-group">
+
+                <div class="col-8" id="main">
+                    
+<div class="res-cons">
+    <style type="text/css">
+    .post-toc {
+        position: fixed;
+        width: 200px;
+        margin-left: -210px;
+        padding: 5px 10px;
+        font-family: Athelas, STHeiti, Microsoft Yahei, serif;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, .07);
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.98);
+        background-clip: padding-box;
+        -webkit-box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        box-shadow: 1px 1px 2px rgba(0, 0, 0, .125);
+        word-wrap: break-word;
+        white-space: nowrap;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        z-index: 999;
+        cursor: pointer;
+        max-height: 70%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .post-toc .post-toc-title {
+        width: 100%;
+        margin: 0 auto;
+        font-size: 20px;
+        font-weight: 400;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .post-toc .post-toc-content {
+        font-size: 15px;
+    }
+
+    .post-toc .post-toc-content>nav>ul {
+        margin: 10px 0;
+    }
+
+    .post-toc .post-toc-content ul {
+        padding-left: 20px;
+        list-style: square;
+        margin: 0.5em;
+        line-height: 1.8em;
+    }
+
+    .post-toc .post-toc-content ul ul {
+        padding-left: 15px;
+        display: none;
+    }
+
+    @media print,
+    screen and (max-width:1057px) {
+        .post-toc {
+            display: none;
+        }
+    }
+</style>
+<div class="post-toc" style="position: absolute; top: 188px;">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#python爬虫-爬取图片">python爬虫-爬取图片</a></li>
+  </ul>
+</nav>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var postToc = $(".post-toc");
+        if (postToc.length) {
+            var leftPos = $("#main").offset().left;
+            if(leftPos<220){
+                postToc.css({"width":leftPos-10,"margin-left":(0-leftPos)})
+            }
+
+            var t = postToc.offset().top - 20,
+                a = {
+                    start: {
+                        position: "absolute",
+                        top: t
+                    },
+                    process: {
+                        position: "fixed",
+                        top: 20
+                    },
+                };
+            $(window).scroll(function () {
+                var e = $(window).scrollTop();
+                e < t ? postToc.css(a.start) : postToc.css(a.process)
+            })
+        }
+    })
+</script>
+    <article class="post">
+        <header>
+            <h1 class="post-title">Python爬虫 爬取图片</h1>
+        </header>
+        <date class="post-meta meta-date">
+            2020年3月19日
+        </date>
+        
+        
+        <div class="post-meta">
+            <span id="busuanzi_container_page_pv">|<span id="busuanzi_value_page_pv"></span><span>
+                    阅读</span></span>
+        </div>
+        
+        
+        <div class="post-content">
+            <h2 id="python爬虫-爬取图片">python爬虫-爬取图片</h2>
+<p>上次爬取文本的网站是静态网站，今天尝试爬取动态网站上的图片。静态网站和动态网站的区别是什么呢？首先静态网站的特点如下：</p>
+<ol>
+<li>静态网站是最初的建站方式，浏览者所看到的每个页面是建站者上传到服务器上的一个 html （ htm ）文件，这种网站每增加、删除、修改一个页面，都必须重新对服务器的文件进行一次下载上传。网页内容一经发布到网站服务器上，无论是否有用户访问，每个静态网页的内容都是保存在网站服务器上的，也就是说，静态网页是实实在在保存在服务器上的文件，每个网页都是一个独立的文件；</li>
+<li>静态网页的内容相对稳定，因此容易被搜索引擎检索；</li>
+<li>静态网页没有数据库的支持，在网站制作和维护方面工作量较大，因此当网站信息量很大时完全依靠静态网页制作方式比较困难；</li>
+<li>静态网页的交互性较差，在功能方面有较大的限制。</li>
+</ol>
+<p>动态网站的特点如下：</p>
+<p>1.交互性：网页会根据用户的要求和选择而动态地改变和响应，浏览器作为客户端，成为一个动态交流的桥梁，动态网页的交互性也是今后 Web 发展的潮流。</p>
+<p>2.自动更新：即无须手动更新 HTML 文档，便会自动生成新页面，可以大大节省工作量。</p>
+<p>3.因时因人而变：即当不同时间、不同用户访问同一网址时会出现不同页面。</p>
+<p>简单来说，静态网站是固定的html页面，谁访问都是一样的结果。动态网站是有动态生成的内容在页面中的，可以实现一定的定制化。比方说访问网站的页面有个表，不同时间的访问是不同的表现。具体的内容实现，是在访问服务器的时候，不是请求的html页面或下载东西等等，而是需要调用servlet。动态网站使用动态加载常用的手段就是通过调用JavaScript来实现的。本博客就是静态网站，它基于hugo实现，下面我们爬取一个动态图片网站上的图片。</p>
+<p>一.</p>
+<p>（1）目标url:https://unsplash.com/，这是一个免费高清壁纸分享的动态网站，通过审查元素可以知道图片都放在<!-- raw HTML omitted -->标签中，这个标签有有、alt、src、class、style属性，其中src属性存放的就是我们需要的图片保存地址，我们根据这个地址就可以进行图片的下载。那么正常的下载过程如下：</p>
+<ol>
+<li>使用requeusts获取整个网页的HTML信息；</li>
+<li>使用Beautiful Soup解析HTML信息，找到所有``标签，提取src属性，获取图片存放地址；</li>
+<li>根据图片存放地址，下载图片。</li>
+</ol>
+<p>但是我们爬取得到的html信息和在网站审查元素时的结果完全不一样，这是因为这个网站的所有图片都是<strong>动态加载</strong>的！动态加载有一部分的目的就是为了反爬虫。</p>
+<p>（2）由于目标网站是动态加载的，所以我们可以通过抓包找到负责动态加载图片的JavaScript脚本。抓包工具有很多，小到最常用的web调试工具firebug，达到通用的强大的抓包工具wireshark。这里我们使用更为高效的Fiddler，什么是Fiddler?</p>
+<p>Fiddler是位于客户端和服务器端的HTTP代理，也是目前最常用的http抓包工具之一 。 它能够记录客户端和服务器之间的所有 HTTP请求，可以针对特定的HTTP请求，分析请求数据、设置断点、调试web应用、修改请求的数据，甚至可以修改服务器返回的数据，功能非常强大，是web调试的利器。在做毕设的时候，爬取数据时遇到了翻页url不变的网站，该网站为动态网站，最后通过抓包分析，像网站发送页码进行翻页，解决了此问题。</p>
+<p>Fiddler遇到了点问题，这里使用谷歌浏览器的network工具来进行抓包，如下所示：</p>
+<p><img src="/img/python%E7%88%AC%E8%99%AB1/1.png" alt=""></p>
+<p>右半部分是网站服务器返回的信息，这些信息和用爬虫返回的html信息完全一样，这个不是我们所需要的链接。</p>
+<p>Fiddler问题解决了，Fiddler在抓包https网站时，需要在option选项中先勾选允许抓取https流量。通过Fiddler抓包，我们得到一个JavaScript请求，如下所示，服务器返回的是一个Json格式的内容，json格式是一种轻量级的数据交换格式，起到封装数据的作用，易于人阅读和编写，同时也易于机器解析和生成。</p>
+<p><img src="/img/python%E7%88%AC%E8%99%AB1/2.png" alt=""></p>
+<p>从上图可以看到，服务器返回的内容有图片的id，大小，链接等信息，但图片的链接有很多，因此需要确定以下哪一个是对应的图片的链接。如下所示，我们点击图片的下载，然后抓包分析，</p>
+<p><img src="/img/python%E7%88%AC%E8%99%AB1/3.png" alt=""></p>
+<p>发送的请求为：</p>
+<pre><code>https://unsplash.com/photos/eeTJKC_wz34/download?force=trues 
+</code></pre><p>通过Fiddler抓包，我们发现，点击不同图片的下载按钮，GET请求的地址都是不同的。但是它们很有规律，就是中间有一段代码是不一样的，其他地方都一样，中间的代码即为json数据中的照片的id，我们只要解析出每个照片的id，就可以获得图片下载的请求地址，然后根据这个请求地址，我们就可以下载图片了。怎么编程提取这些json数据呢？我们也是分步完成：</p>
+<ol>
+<li>获取整个json数据</li>
+<li>解析json数据</li>
+</ol>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">requests</span>
+target <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">http://unsplash.com/napi/photos?page=1&amp;per_page=6</span><span style="color:#d14">&#39;</span><span style="color:#998;font-style:italic">#这为Fiddler抓包得到的JavaScript请求地址，可以看出每一页有6张图片，我们可以更改页数和每页的图片数来获取图片。</span>
+req <span style="color:#000;font-weight:bold">=</span> requests<span style="color:#000;font-weight:bold">.</span>get(url<span style="color:#000;font-weight:bold">=</span>target) 
+<span style="color:#000;font-weight:bold">print</span>(req<span style="color:#000;font-weight:bold">.</span>text)
+</code></pre></td></tr></table>
+</div>
+</div><p>通过上述代码可以直接输出json内容，没有出现报错的问题。如果出现SSL认证错误，一个非常简单的解决这个认证错误的方法就是设置requests.get()方法的verify参数。这个参数默认设置为True，也就是执行认证。我们将其设置为False，可以绕过认证。如果GET请求失败，还有可能是需要验证验证Request Headers，这也是反爬虫的手段之一，下面是Headers中的部分参数，测试需要哪一个参数，我们在requests.get()中添加相应的headers参数即可。</p>
+<ol>
+<li>
+<p>User-Agent：这里面存放浏览器的信息。可以看到上图的参数值，它表示我是通过Windows的Chrome浏览器，访问的这个服务器。如果我们不设置这个参数，用Python程序直接发送GET请求，服务器接受到的User-Agent信息就会是一个包含python字样的User-Agent。如果后台设计者验证这个User-Agent参数是否合法，不让带Python字样的User-Agent访问，这样就起到了反爬虫的作用。这是一个最简单的，最常用的反爬虫手段。</p>
+</li>
+<li>
+<p>Referer：这个参数也可以用于反爬虫，它表示这个请求是从哪发出的。可以看到我们通过浏览器访问网站，这个请求是从<code>https://unsplash.com/</code>，这个地址发出的。如果后台设计者，验证这个参数，对于不是从这个地址跳转过来的请求一律禁止访问，这样就也起到了反爬虫的作用。</p>
+</li>
+<li>
+<p>authorization：这个参数是基于AAA模型中的身份验证信息允许访问一种资源的行为。在我们用浏览器访问的时候，服务器会为访问者分配这个用户ID。如果后台设计者，验证这个参数，对于没有用户ID的请求一律禁止访问，这样就又起到了反爬虫的作用。</p>
+<p>获得json数据后，用html = json.loads(req.text)就可以解析出来了，这样得到的html是一个list，里面有我们所需要的&quot;id&rdquo;，将其中的id提取出来用于构造下载url即可。最后代码整理如下：</p>
+</li>
+</ol>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">requests</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#555">json</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#555">time</span><span style="color:#000;font-weight:bold">,</span> <span style="color:#555">sys</span>
+<span style="color:#000;font-weight:bold">from</span> <span style="color:#555">contextlib</span> <span style="color:#000;font-weight:bold">import</span> closing
+<span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">get_photos</span>(<span style="color:#0086b3">object</span>):
+    <span style="color:#000;font-weight:bold">def</span> __init__(<span style="color:#999">self</span>):
+        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>photos_id <span style="color:#000;font-weight:bold">=</span> []
+        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>download_server <span style="color:#000;font-weight:bold">=</span> <span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">https://unsplash.com/photos/xxx/download?force=trues</span><span style="color:#d14">&#39;</span>
+        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>target<span style="color:#000;font-weight:bold">=</span><span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">http://unsplash.com/napi/photos?page={}&amp;per_page=4</span><span style="color:#d14">&#39;</span>
+        <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>num<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1</span>
+    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">get_ids</span>(<span style="color:#999">self</span>):
+        <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>num):
+            target_1<span style="color:#000;font-weight:bold">=</span><span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>target<span style="color:#000;font-weight:bold">.</span>format(i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>)
+            req <span style="color:#000;font-weight:bold">=</span> requests<span style="color:#000;font-weight:bold">.</span>get(url<span style="color:#000;font-weight:bold">=</span>target_1)
+            html <span style="color:#000;font-weight:bold">=</span> json<span style="color:#000;font-weight:bold">.</span>loads(req<span style="color:#000;font-weight:bold">.</span>text)<span style="color:#998;font-style:italic">#html为一个list</span>
+            <span style="color:#000;font-weight:bold">for</span> j <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(html)):
+                <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>photos_id<span style="color:#000;font-weight:bold">.</span>append(html[j][<span style="color:#d14"></span><span style="color:#d14">&#34;</span><span style="color:#d14">id</span><span style="color:#d14">&#34;</span>])
+    <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">download</span>(<span style="color:#999">self</span>, photo_id, filename):
+        target <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>download_server<span style="color:#000;font-weight:bold">.</span>replace(<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">xxx</span><span style="color:#d14">&#39;</span>, photo_id)
+        <span style="color:#000;font-weight:bold">with</span> closing(requests<span style="color:#000;font-weight:bold">.</span>get(url<span style="color:#000;font-weight:bold">=</span>target, stream<span style="color:#000;font-weight:bold">=</span><span style="color:#999">True</span>, verify <span style="color:#000;font-weight:bold">=</span> <span style="color:#999">False</span>)) <span style="color:#000;font-weight:bold">as</span> r:
+            <span style="color:#000;font-weight:bold">with</span> <span style="color:#0086b3">open</span>(<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">%d</span><span style="color:#d14">.jpg</span><span style="color:#d14">&#39;</span> <span style="color:#000;font-weight:bold">%</span> filename, <span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">ab+</span><span style="color:#d14">&#39;</span>) <span style="color:#000;font-weight:bold">as</span> f:
+                <span style="color:#000;font-weight:bold">for</span> chunk <span style="color:#000;font-weight:bold">in</span> r<span style="color:#000;font-weight:bold">.</span>iter_content(chunk_size <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1024</span>):<span style="color:#998;font-style:italic">#当流下载时，这是优先推荐的获取内容方式。</span>
+                    <span style="color:#000;font-weight:bold">if</span> chunk:
+                        f<span style="color:#000;font-weight:bold">.</span>write(chunk)
+                        f<span style="color:#000;font-weight:bold">.</span>flush()<span style="color:#998;font-style:italic">#清空缓冲区</span>
+<span style="color:#000;font-weight:bold">if</span> __name__ <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">__main__</span><span style="color:#d14">&#39;</span>:
+    gp <span style="color:#000;font-weight:bold">=</span> get_photos()
+    <span style="color:#000;font-weight:bold">print</span>(<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">获取图片连接中:</span><span style="color:#d14">&#39;</span>)
+    gp<span style="color:#000;font-weight:bold">.</span>get_ids()
+    <span style="color:#000;font-weight:bold">print</span>(<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">图片下载中:</span><span style="color:#d14">&#39;</span>)
+    <span style="color:#000;font-weight:bold">for</span> i <span style="color:#000;font-weight:bold">in</span> <span style="color:#0086b3">range</span>(<span style="color:#0086b3">len</span>(gp<span style="color:#000;font-weight:bold">.</span>photos_id)):
+        <span style="color:#000;font-weight:bold">print</span>(<span style="color:#d14"></span><span style="color:#d14">&#39;</span><span style="color:#d14">  正在下载第</span><span style="color:#d14">%d</span><span style="color:#d14">张图片</span><span style="color:#d14">&#39;</span> <span style="color:#000;font-weight:bold">%</span> (i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>))
+        gp<span style="color:#000;font-weight:bold">.</span>download(gp<span style="color:#000;font-weight:bold">.</span>photos_id[i], (i<span style="color:#000;font-weight:bold">+</span><span style="color:#099">1</span>))
+</code></pre></td></tr></table>
+</div>
+</div><p>下载速度比较慢，其他爬取动态网站的方法也是如此。</p>
+<p>代码中with可以用来关闭文件，数据库资源。只要实现了__enter__() 和 __exit__()这两个方法的类都可以轻松创建上下文管理器，就能使用with。with语句体执行之前运行__enter__方法，在with语句体执行完后运行__exit__方法。如果一个类连这两个方法都没有，是没资格使用with的。 那么contextlib.closing()会帮一个没有上述方法的类加上__enter__()和__exit__()，使其满足with的条件</p>
+
+        </div>
+
+        
+<div class="post-archive">
+    <ul class="post-copyright">
+        <li><strong>原文作者：</strong><a rel="author" href="https://zdhwg.github.io">WG</a></li>
+        <li style="word-break:break-all"><strong>原文链接：</strong><a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E5%9B%BE%E7%89%87/">https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E5%9B%BE%E7%89%87/</a></li>
+        <li><strong>版权声明：</strong>本作品采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议</a>进行许可，非商业转载请注明出处（作者，原文链接），商业转载请联系作者获得授权。</li>
+    </ul>
+</div>
+<br/>
+
+
+
+        
+
+<div class="post-archive">
+    <h2>See Also</h2>
+    <ul class="listing">
+        
+        <li><a href="/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E6%96%87%E6%9C%AC/">Python爬虫-爬取文本</a></li>
+        
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture8/">Cs224n笔记 Lecture8</a></li>
+        
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture7/">Cs224n笔记 Lecture7</a></li>
+        
+        <li><a href="/post/cs224n_lecture6%E7%AC%94%E8%AE%B0/">Cs224n笔记-lecture6</a></li>
+        
+        <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture5/">Cs224n笔记 Lecture5</a></li>
+        
+    </ul>
+</div>
+
+
+        <div class="post-meta meta-tags">
+            
+            没有标签
+            
+        </div>
+    </article>
+    
+    
+
+    
+    
+    <div class="post bg-white">
+      <script src="https://utteranc.es/client.js"
+            repo= "zdhwg/hugoblogtalks"
+            issue-term="pathname"
+            theme="github-light"
+            crossorigin="anonymous"
+            async>
+      </script>
+    </div>
+    
+</div>
+
+                </div>
+
+                <div id="secondary">
+    <section class="widget">
+        <form id="search" action='https://zdhwg.github.io/search/' method="get" accept-charset="utf-8" target="_blank" _lpchecked="1">
+      
+      <input type="text" name="q" maxlength="20" placeholder="Search">
+      <input type="hidden" name="sitesearch" value="https://zdhwg.github.io">
+      <button type="submit" class="submit icon-search"></button>
+</form>
+    </section>
+    
+    <section class="widget">
+        <h3 class="widget-title">最近文章</h3>
+<ul class="widget-list">
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E6%96%B0%E5%86%A0%E8%82%BA%E7%82%8E%E7%9A%84%E8%88%86%E8%AE%BA%E5%88%86%E6%9E%90/" title="微博新冠肺炎的舆论分析">微博新冠肺炎的舆论分析</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/" title="微博爬虫">微博爬虫</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/" title="微博爬虫">微博爬虫</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8C%E5%A4%9A%E4%B8%AApy%E6%96%87%E4%BB%B6/" title="Python批量执行多个py文件">Python批量执行多个py文件</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/" title="情感分析">情感分析</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E8%A7%86%E9%A2%91/" title="Python爬虫 爬取视频">Python爬虫 爬取视频</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture10/" title="cs224n笔记 Lecture10">cs224n笔记 Lecture10</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E5%9B%BE%E7%89%87/" title="Python爬虫 爬取图片">Python爬虫 爬取图片</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E6%96%87%E6%9C%AC/" title="Python爬虫-爬取文本">Python爬虫-爬取文本</a>
+    </li>
+    
+    <li>
+        <a href="https://zdhwg.github.io/post/cs224n%E7%AC%94%E8%AE%B0-lecture8/" title="Cs224n笔记 Lecture8">Cs224n笔记 Lecture8</a>
+    </li>
+    
+</ul>
+    </section>
+
+    
+
+    <section class="widget">
+        <h3 class="widget-title">分类</h3>
+<ul class="widget-list">
+    
+</ul>
+    </section>
+
+    <section class="widget">
+        <h3 class="widget-title">标签</h3>
+<div class="tagcloud">
+    
+</div>
+    </section>
+
+    
+<section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+        
+        <li>
+            <a target="_blank" href="http://blog.csdn.net/qq_40800269" title="csdn博客">WG的csdn博客</a>
+        </li>
+        
+    </ul>
+</section>
+
+
+    <section class="widget">
+        <h3 class="widget-title">其它</h3>
+        <ul class="widget-list">
+            <li><a href="https://zdhwg.github.io/index.xml">文章 RSS</a></li>
+        </ul>
+    </section>
+	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=26212426&auto=1&height=66"></iframe>
+</div>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+    <div class="container">
+        &copy; 2020 <a href="https://zdhwg.github.io">WG的博客 By WG</a>.
+        Powered by <a rel="nofollow noreferer noopener" href="https://gohugo.io" target="_blank">Hugo</a>.
+        <a href="https://www.flysnow.org/" target="_blank">Theme</a> based on <a href="https://github.com/flysnow-org/maupassant-hugo" target="_blank">maupassant</a>.
+        
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/gh/zdhwg/live2d-widget/autoload.js"></script>
+
+    
+    <script type="text/javascript">
+        window.MathJax = {
+            tex2jax: {
+                inlineMath: [['$', '$']],
+                processEscapes: true
+                }
+            };
+    </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+
+
+<a id="rocket" href="#top"></a>
+<script type="text/javascript" src='/js/totop.js?v=0.0.0' async=""></script>
+
+
+
+    <script type="text/javascript" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" async></script>
+
+
+
+
+    <script src='/js/douban.js'></script>
+
+</body>
+
+</html>
