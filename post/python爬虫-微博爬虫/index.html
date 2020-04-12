@@ -373,8 +373,13 @@
 </code></pre></td></tr></table>
 </div>
 </div><ol start="4">
-<li><a href="https://github.com/KimMeen/Weibo-Analyst/blob/master/step1_comments_spider/weibo_spider_comments_mysql.py">https://github.com/KimMeen/Weibo-Analyst/blob/master/step1_comments_spider/weibo_spider_comments_mysql.py</a></li>
+<li></li>
 </ol>
+<p><code>UserAgent</code>是识别浏览器的一串字符串，相当于浏览器的身份证，在利用爬虫爬取网站数据时，频繁更换<code>UserAgent</code>可以避免触发相应的反爬机制。<code>fake-useragent</code>对频繁更换<code>UserAgent</code>提供了很好的支持，可谓防反扒利器。</p>
+<p><strong><a href="https://s.weibo.com/weibo?q=">https://s.weibo.com/weibo?q=</a>肺炎&amp;sort=hot&amp;suball=1&amp;timescope=custom:2020-01-013:2020-01-01&amp;Refer=g&amp;page=1</strong></p>
+<p>如上所示为https://s.weibo.cn的高级搜索时的url，可以看出其中有几个关键点，包括主题、typeall=1代表搜索模式（是按热度搜索还是按照全部搜索）、时间和页数。该站点的高级搜索功能如下所示：</p>
+<p><img src="/img/%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/1.jpg" alt=""></p>
+<p>2019年12月31日，武汉市卫健卫发布通告称在华南海鲜市场发现多例肺炎病，这一通报引发了较为广 泛的社会关注，舆论的关注点主要集中于“华南海 鲜市场”、“肺炎”、“传染”等词。需要说明的是，关于此次肺炎的通报在名称上存在一个变动过程，2019年月12月３０日～2020年1月10日称不明原因肺 炎、不明原因病毒性肺炎，2020年年1月11日～2月7日称新型冠状病毒感染的肺炎， 2月8日，国务院联防联控机制新闻发布会通报了国家卫健委关于 新冠病毒感染的肺炎暂命名为“新型冠状病毒肺炎”，简称“新冠肺炎”的信息，因此，以“肺炎”为关 键词进行搜索，可以更全面地抓取到各时段关于本次疫情的议题。</p>
 
         </div>
 
@@ -396,8 +401,6 @@
     <h2>See Also</h2>
     <ul class="listing">
         
-        <li><a href="/post/%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/">微博爬虫</a></li>
-        
         <li><a href="/post/python%E6%89%B9%E9%87%8F%E6%89%A7%E8%A1%8C%E5%A4%9A%E4%B8%AApy%E6%96%87%E4%BB%B6/">Python批量执行多个py文件</a></li>
         
         <li><a href="/post/%E6%83%85%E6%84%9F%E5%88%86%E6%9E%90/">情感分析</a></li>
@@ -405,6 +408,8 @@
         <li><a href="/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E8%A7%86%E9%A2%91/">Python爬虫 爬取视频</a></li>
         
         <li><a href="/post/cs224n%E7%AC%94%E8%AE%B0-lecture10/">cs224n笔记 Lecture10</a></li>
+        
+        <li><a href="/post/python%E7%88%AC%E8%99%AB-%E7%88%AC%E5%8F%96%E5%9B%BE%E7%89%87/">Python爬虫 爬取图片</a></li>
         
     </ul>
 </div>
@@ -450,15 +455,15 @@
 <ul class="widget-list">
     
     <li>
+        <a href="https://zdhwg.github.io/post/keras%E4%B8%AD%E7%9A%84LSTM%E5%8F%8ADjango/" title="Django及Keras中的LSTM">Django及Keras中的LSTM</a>
+    </li>
+    
+    <li>
         <a href="https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E6%96%B0%E5%86%A0%E8%82%BA%E7%82%8E%E7%9A%84%E8%88%86%E8%AE%BA%E5%88%86%E6%9E%90/" title="微博新冠肺炎的舆论分析">微博新冠肺炎的舆论分析</a>
     </li>
     
     <li>
         <a href="https://zdhwg.github.io/post/python%E7%88%AC%E8%99%AB-%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/" title="微博爬虫">微博爬虫</a>
-    </li>
-    
-    <li>
-        <a href="https://zdhwg.github.io/post/%E5%BE%AE%E5%8D%9A%E7%88%AC%E8%99%AB/" title="微博爬虫">微博爬虫</a>
     </li>
     
     <li>
